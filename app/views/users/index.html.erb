@@ -1,7 +1,12 @@
 <script language="JavaScript">
 $(document).ready(function() {
   new GoGame({
-    chatbox: 'chatbox'
+    chatbox: 'chatbox',
+    user: {
+      id: <%= current_user.id %>,
+      name: "<%= current_user.name %>",
+      description: "<%= current_user.description %>"
+    },
   });
   
   $('#send_message_form').ajaxForm(function() {

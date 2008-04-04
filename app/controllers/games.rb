@@ -16,7 +16,9 @@ class Games < Application
   def show
     @message = Message.new
     @opponent = @game.white_player == current_user ? @game.black_player : @game.white_player
-    display @game
+    content_type :html
+    headers['Content-Type'] = 'application/xhtml+xml'
+    render
   end
   
   # GET /games/new

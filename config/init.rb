@@ -55,8 +55,11 @@ Merb::BootLoader.after_app_loads do
   ### Add dependencies here that must load after the application loads:
 
   # dependency "magic_admin" # this gem uses the app's model classes
+  
+  ### Mime Types
+  # Merb.add_mime_type :xhtml, :to_xhtml, %w[application/xhtml+xml], "Content-Type" => "application/xhtml+xml"
+  
 end
-
 
 ### Plugins
 require 'merb-assets'

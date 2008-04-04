@@ -5,7 +5,7 @@
  * 
  * Author: Ben Hughes, ben -yaYt- railsgarden -daht- com
  * 
- * Dependencies: jQuery, ThickBox
+ * Dependencies: jQuery, ThickBox, jQuery.svg
  * 
  * GoGame Class
  * --------
@@ -21,9 +21,12 @@
  * - board: Reference to the board if currently in a game
  * - chatbox: Reference to the chat box
  * - console: A console logging action history
+ * - user: Details about the current user
  * - game: An object of game details:
  *   - id: Database ID of the game
  *   - size: Number of the size of the square board
+ *   - color: black or white (current user's player color)
+ *   - opponent: Object representing the opponent
  * 
  **********************************************************/
 
@@ -31,9 +34,21 @@ var GoGame = function(options) {
   this.board = options.board;
   this.chatbox = options.chatbox;
   this.console = options.console;
+  this.user = options.user;
   this.game = options.game;
   this.initialize();
 };
+
+/*** Configuration ***/
+
+GoGame.BOARD_HEIGHT = 440;
+GoGame.BOARD_WIDTH = 440;
+GoGame.BOARD_TOP = 30;
+GoGame.BOARD_LEFT = 30;
+GoGame.PIECE_RADIUS_DIVISOR = 2.4;
+
+
+/*** Implementation - Do not change! ***/
 
 GoGame.prototype = {
   
@@ -41,11 +56,58 @@ GoGame.prototype = {
     this.title = 'Go Game';
     this.author = 'Ben Hughes';
     
+    this.createGameBoard();
     this.startEventPoller();
   },
   
+  createGameBoard: function() {
+    if (!this.game || !this.board || !this.board.id) { return; }
+    
+    if (!this.board.width) { this.board.width = GoGame.BOARD_WIDTH; }
+    if (!this.board.height) { this.board.height = GoGame.BOARD_HEIGHT; }
+    if (!this.board.top) { this.board.top = GoGame.BOARD_TOP; }
+    if (!this.board.left) { this.board.left = GoGame.BOARD_LEFT; }
+    
+    // Default rows and columns to size, could support non-square in future
+    this.board.rows = this.board.size;
+    this.board.columns = this.board.size;
+    
+    this.board.rowSize = this.board.height / (this.board.rows - 1);
+    this.board.columnSize = this.board.width / (this.board.columns - 1);
+    
+    if (!this.board.pieceRadius) { this.board.pieceRadius = this.board.rowSize / GoGame.PIECE_RADIUS_DIVISOR; }
+    
+    $('#' + this.board.id + ' #svgboard').svg();
+    this.svgboard = svgManager.getSVGFor('#' + this.board.id + ' #svgboard');
+    
+    // Construct Row & Column Lines
+    for (i = 0; i < this.board.rows; i++) {
+      this.svgboard.line(null, this.board.top, this.board.top + this.board.rowSize * i, this.board.top + this.board.width, this.board.top + this.board.rowSize * i, {stroke: 'black', stroke_width: 1});
+    }
+    
+    for (i = 0; i < this.board.columns; i++) {
+      this.svgboard.line(null, this.board.left + this.board.columnSize * i, this.board.left, this.board.left + this.board.columnSize * i, this.board.left + this.board.height, {stroke: 'black', stroke_width: 1});
+    }
+    
+    // Create some example pieces
+    for (i = 0; i < 9; i++) {
+      this.createPiece(i, i, (i % 2) ? 'white' : 'black');
+    }
+    
+  },
+  
+  // TODO: Refactor
+  createPiece: function(row, column, color) {
+    this.svgboard.circle(null, this.board.left + this.board.columnSize * column, this.board.top + this.board.rowSize * row, this.board.pieceRadius, {fill: color, stroke: 'black', stroke_width: 2});
+  },
+  
+  // TODO: Refactor
+  removePiece: function(row, column) {
+    
+  },
+  
   startEventPoller: function() {
-    $(this).everyTime('2s', 'eventpoller', this.pollEvent);
+    $(this).everyTime('10s', 'eventpoller', this.pollEvent);
   },
   
   pollEvent: function() {
@@ -92,11 +154,11 @@ GoGame.prototype = {
       '</div>'
     ));
     
-    $('#user_list_entry_' + data.source_user.id).fadeIn('normal');
+    $('#user_list_entry_' + data.source_user.id).fadeIn();
   },
   
   onUserLeft: function(data) {
-    $('#userslist #user_list_entry_' + data.source_user.id).fadeOut('normal');
+    $('#userslist #user_list_entry_' + data.source_user.id).fadeOut();
   },
   
   onMessage: function(data) {
@@ -119,19 +181,19 @@ GoGame.prototype = {
       '</div>'
     ));
     
-    $('#invites_list_entry_' + data.source_user.id).fadeIn('normal');
+    $('#invites_list_entry_' + data.source_user.id).fadeIn();
   },
   
   onGameInviteResponse: function(data) {
     switch (data.response) {
       case 'Accepted':
-        $('#invitee').fadeOut('normal');
+        $('#invitee').fadeOut();
         this.startGame();
         break;
         
       case 'Rejected':
-        $('#invitee').fadeOut('fast');
-        $('#rejectedinvite').fadeIn('fast');
+        $('#invitee').fadeOut();
+        $('#rejectedinvite').fadeIn();
         break;
     }
   },
@@ -146,6 +208,8 @@ GoGame.prototype = {
   
   startGame: function() {
     $('<h2>Player Accepted! Starting Game...</h2>').appendTo('#gameboard');
+    
+    this.createGameBoard();
   }
   
 };

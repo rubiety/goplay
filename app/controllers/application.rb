@@ -3,5 +3,4 @@ require File.join(File.dirname(__FILE__), '..', '..', "lib", "authenticated_syst
 class Application < Merb::Controller
   include AuthenticatedSystem::Controller
   
-  
 end

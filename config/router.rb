@@ -36,6 +36,7 @@ Merb::Router.prepare do |r|
   r.to :controller => 'main' do |main|
     main.match('/').to(:action => 'index').name(:home)
     main.match('/about').to(:action => 'about')
+    main.match('/svg').to(:action => 'svg')
   end
   
   r.match('/login').to(:controller => 'sessions', :action => 'create').name(:login)

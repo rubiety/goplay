@@ -423,7 +423,9 @@ ol li {
 }
 
 #gameboard #svgboard {
-  height: 400px;
+  padding: 15px;
+  height: 500px;
+  background-color: #EDFBAF;
   border: 1px solid #333333;
   text-align: center;
 }
@@ -435,3 +437,10 @@ ol li {
   border: 1px solid #333333;
   text-align: center;
 }
+
+
+/*** SVG-Related ***/
+
+svg:svg { display: none; }
+
+.svg_error { color: red; font-weight: bold; }
