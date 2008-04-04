@@ -1,0 +1,43 @@
+<% throw_content :for_head do %>
+<script src="/javascripts/livevalidation.js" type="text/javascript"></script>
+<script language="JavaScript">
+$(document).ready(function() {
+  new LiveValidation('user_first_name').add(Validate.Presence);
+  new LiveValidation('user_last_name').add(Validate.Presence);
+  new LiveValidation('user_login').add(Validate.Length, { minimum: 3, maximum: 40 });
+  new LiveValidation('user_email').add(Validate.Email);
+  new LiveValidation('user_password').add(Validate.Presence);
+  new LiveValidation('user_password_confirmation').add(Validate.Confirmation, { match: 'user_password' });
+})
+</script>
+<% end %>
+
+<div class="leftcolumn">
+  <h1>Edit Profile</h1>
+  
+  <p>
+    Manage your user profile below:
+  </p>
+  
+  <%= message_block :on => :user %>
+  
+  <div class="formbox">
+    <% form_for :user, :action => url(:users) do %>
+      <fieldset>
+        <p><%= text_control :first_name, :label => 'First Name' %></p>
+        <p><%= text_control :last_name, :label => 'Last Name' %></p>
+        <p><%= text_control :login, :label => 'Username' %></p>
+        <p><%= text_control :email, :label => 'Email Address', :size => 25 %></p>
+        <p><%= text_area_control :description, :label => 'Brief Description of Yourself', :rows => 2, :cols => 45 %>
+        <p><%= submit_field :value => 'Save' %></p>
+      </fieldset>
+    <% end %>
+  </div>
+  
+</div>
+
+<div class="rightcolumn">
+  
+</div>
+
+<div style="clear: both"></div>

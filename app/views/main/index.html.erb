@@ -1,0 +1,26 @@
+<%= message_block %>
+
+<div class="leftcolumn">
+  <h1>How does it work?</h1>
+  
+</div>
+
+<div class="rightcolumn">
+  <h1>Login</h1>
+  
+  <div class="formbox">
+    
+    <% form_tag(:action => url(:session)) do %>
+      <fieldset>
+        <p><%= text_field :name => :login, :label => 'Username:' %></p>
+        <p><%= password_field :name => :password, :label => 'Password:' %></p>
+        <p><%= submit_field :value => 'Login' %>
+      </fieldset>
+    <% end %>
+    
+    <p>&raquo; Don't have an account? <a href="<%= url(:new_user) %>">Register</a></p>
+    
+  </div>
+</div>
+
+<div style="clear: both"></div>

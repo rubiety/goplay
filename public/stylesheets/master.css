@@ -1,0 +1,437 @@
+/*** Browser Resets ***/
+
+html, body, ul, ol, li, dl, p, pre, dd, blockquote, 
+h1, h2, h3, h4, h5, h6, a, form, label, fieldset, address {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+form { margin-bottom: 0; display: inline; }
+img { border: 0; }
+
+
+/*** Main Structural Elements ***/
+
+body {
+	font-family: Georgia, Verdana, Arial, Helvetica, sans-serif;
+	font-size: 100.01%;
+	background: #660000;
+	padding: 0;
+	margin: 0;
+}
+
+#wrapper {
+	font-size: 0.8em;
+	line-height: 1.4em;
+	width: 80%;
+	margin: 10px auto 5px auto;
+	padding: 10px;
+	background: #990000;
+}
+
+#innerwrapper {
+	background: #FFFFFF;
+	padding: 10px;
+	border: 1px solid #999999;
+}
+
+#mainframe {
+	margin: 8px;
+}
+
+#footer {
+	font-size: 0.8em;
+	font-weight: normal;
+	line-height: 1.4em;
+	width: 80%;
+	margin: 2px auto 10px auto;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #995F5A;
+}
+#footer a:link { color: #995F5A; text-decoration: underline; }
+#footer a:visited { color: #995F5A; text-decoration: underline; }
+#footer a:hover { color: #995F5A; text-decoration: none; }
+
+
+/*** Text ***/
+
+a:link { color: #990000; text-decoration: underline; }
+a:visited { color: #990000; text-decoration: underline; }
+a:hover { color: #990000; text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Georgia, Verdana, Arial, sans-serif;
+	padding: 0;
+	margin-bottom: 0.8em;
+	font-weight: normal;
+	margin-top: 0px;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 1.7em;
+	font-weight: normal;
+	color: #990000;
+	line-height: 1.1em;
+	border-bottom: 1px dashed #990000;
+	margin-bottom: 0.6em;
+}
+
+h2 {
+	color: #330000;
+	font-size: 1.4em;
+	font-weight: normal;
+	margin-bottom: 0.6em;
+}
+h2 span {
+	font-size: 0.8em;
+	color: #666666;
+}
+h2 a:link { color: #000000; text-decoration: none; }
+h2 a:visited { color: #000000; text-decoration: none; }
+h2 a:hover { color: #000000; text-decoration: underline; }
+
+h3 {
+	color: #330000;
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-bottom: 0.3em;
+}
+
+p {
+	margin-bottom: 1.1em;
+}
+
+blockquote {
+	border: 1px dashed #CDCDCD;
+	background: #F2F2F2;
+	padding: 1em;
+	margin-bottom: 1.5em;
+}
+
+blockquote p {
+	margin-bottom: 0;
+}
+
+small {
+	font-size: 0.8em;
+}
+
+.microtext {
+	font-size: 0.8em;
+}
+
+.fieldinfo {
+	font-size: 0.8em;
+	padding-bottom: 0.3em;
+}
+
+sup {
+	position: relative;
+	bottom: 0.3em;
+	vertical-align: baseline;
+}
+
+sub {
+	position: relative;
+	bottom: -0.2em;
+	vertical-align: baseline;
+}
+
+hr {
+	clear: left;
+	border: none;
+	border-bottom: 1px dashed #990000;
+	margin-bottom: 10px;
+	margin-top: 5px;
+}
+
+pre {
+
+}
+
+code {
+	font-family: "Courier New", Courier, monospace;        
+	font-size: 1em;
+	border: 1px dashed #CDCDCD;
+	background: #F2F2F2;
+	padding: 1em;
+	display: block;
+}
+
+ul, ol {
+	margin-bottom:1.5em;
+	padding-left:0;
+}
+
+ul {
+	list-style-type:none;
+	margin-left:0;
+}	
+
+ul li {
+	padding-left: 1em;
+	margin-bottom: 0.6em;
+	background-image: url(../images/icons/bullets/gt.gif);
+	background-position-x: 0.5em;
+	background-position: left;
+	background-repeat: no-repeat;
+	vertical-align: top;
+}
+
+ul.bulletless li {
+	padding-left: 0;
+	background: none;
+}
+
+ol {
+	list-style-type: decimal;
+	margin-left: 2em;
+}	
+
+ol li {
+	padding-left: 0;
+	margin-bottom: 0.6em;
+}
+
+
+/*** Specific Page Styles ***/
+
+#letterhead {
+	padding-left: 95px;
+	margin-bottom: 1em;
+	background-image: url(../images/letterhead_logo.gif);
+	background-position: left;
+	background-repeat: no-repeat;
+	min-height: 75px;
+}
+
+#letterhead h3 {
+	font-size: 1.6em;
+	font-weight: bold;
+}
+
+#letterhead p {
+	font-size: 1.1em;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+	color: #333333;
+}
+
+#loggedin {
+  float: right;
+}
+
+.leftcolumn {
+	float: left;
+	width: 62%;
+}
+
+.rightcolumn {
+	float: right;
+	width: 35%;
+}
+
+.formbox {
+	background-color: #DDDDDD;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+.formbox fieldset p {
+  padding-bottom: 6px;
+}
+
+.formbox fieldset label {
+  display: block;
+  font-weight: bold;
+  padding-bottom: 4px;
+}
+
+.formbox fieldset input {
+  font-size: 18px;
+}
+
+
+/*** Live Validation ***/
+.LV_validation_message {
+  font-weight: bold;
+  margin: 0 0 0 5px;
+}
+
+.LV_valid {
+  color: #00CC00;
+}
+	
+.LV_invalid {
+  color: #CC0000;
+}
+    
+.LV_valid_field, input.LV_valid_field:hover, input.LV_valid_field:active, textarea.LV_valid_field:hover, textarea.LV_valid_field:active {
+  border: 1px solid #00CC00;
+}
+
+.LV_invalid_field, input.LV_invalid_field:hover, input.LV_invalid_field:active, textarea.LV_invalid_field:hover, textarea.LV_invalid_field:active {
+  border: 1px solid #CC0000;
+}
+
+
+/*** Flash Messages ***/  
+.flash {
+  
+}
+
+.flash ul {  
+    padding-left: 0pt;  
+    margin-bottom: 0pt;  
+    list-style-type: none;  
+    margin-left: 0pt;  
+}  
+  
+.flash ul li {  
+    background: transparent url(../images/icons/bullets/gt.gif) no-repeat scroll left center;  
+    margin-bottom: 0.6em;  
+    padding-left: 1em;  
+    vertical-align: top;  
+}
+
+.flash .container {  
+    padding: 1em;  
+    padding-left: 5em;  
+    margin-bottom: 1.5em;  
+}
+
+.flash .error {
+    background: #fcf6d0 url(../images/icons/flashes/error.gif) 1.5em 1em no-repeat;  
+    border-top: 1px solid #ecd757;  
+    border-bottom: 1px solid #ecd757;  
+}  
+.flash .back {  
+    background: #e9f3dc url(../images/icons/flashes/back.gif) 1.5em 1em no-repeat;  
+    border-top: 1px solid #bfcbb0;  
+    border-bottom: 1px solid #bfcbb0;  
+}  
+  
+.flash .confirm {  
+    background: #e9f3dc url(../images/icons/flashes/confirm.gif) 1.5em 1em no-repeat;  
+    border-top: 1px solid #bfcbb0;  
+    border-bottom: 1px solid #bfcbb0;  
+}  
+  
+.flash .info {  
+    background: #dee9f4 url(../images/icons/flashes/info.gif) 1.5em 1em no-repeat;  
+    border-top: 1px solid #b4c5d5;  
+    border-bottom: 1px solid #b4c5d5;  
+}  
+  
+.flash .warn {  
+    background: #fcf6d0 url(../images/icons/flashes/warn.gif) 1.5em 1em no-repeat;  
+    border-top: 1px solid #ecd757;  
+    border-bottom: 1px solid #ecd757;  
+}
+
+
+/*** Users & Chat ***/
+
+#userslist {
+  
+}
+
+#userslist .user {
+  clear: left;
+}
+
+#userslist .user img {
+  float: left;
+  padding-right: 10px;
+  padding-bottom: 4px;
+}
+
+#userslist .user span {
+  display: block;
+  font-weight: bold;
+}
+
+
+#inviteslist {
+  
+}
+
+#inviteslist .invite {
+  background-color: #990000;
+  border: 1px solid #330000;
+  padding: 10px;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+#inviteslist a:link { color: #FFFFFF; text-decoration: underline; }
+#inviteslist a:visited { color: #FFFFFF; text-decoration: underline; }
+#inviteslist a:hover { color: #FFFFFF; text-decoration: none; }
+
+#inviteslist .invite h4 {
+  font-weight: normal;
+  font-size: 1.3em;
+}
+
+#inviteslist .invite img {
+  float: left;
+  padding-right: 10px;
+  padding-bottom: 4px;
+}
+
+#inviteslist .invite span {
+  display: block;
+  font-weight: bold;
+}
+
+#chatbox {
+  background-color: #DDDDDD;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+#chatbox #messagelist {
+  height: 300px;
+  background-color: #EDFBAF;
+  border: 1px solid #666666;
+  padding: 8px;
+  overflow: auto;
+  margin-bottom: 8px;
+}
+
+#chatbox #messagelist .message {
+  padding-bottom: 5px;
+}
+
+#chatbox #messagelist .message span {
+  font-weight: bold;
+}
+
+#chatbox #sendmessage {
+  
+}
+
+
+
+/*** Game Board ***/
+
+#gameboard {
+  
+}
+
+#gameboard #svgboard {
+  height: 400px;
+  border: 1px solid #333333;
+  text-align: center;
+}
+
+#gameboard #controls {
+  margin-top: 10px;
+  background-color: #DDDDDD;
+  height: 60px;
+  border: 1px solid #333333;
+  text-align: center;
+}

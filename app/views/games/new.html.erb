@@ -1,0 +1,22 @@
+<h1>New Game</h1>
+
+<h2>With:</h2>
+<div id="userslist">
+  <div class="user">
+    <img src="/images/avatars/bhughes.jpg" />
+    <span><%= h @opponent.name %></span>
+    <%= h @opponent.description %>
+  </div>
+</div>
+
+<hr />
+
+<div class="formbox">
+  <% form_for :game, :action => url(:games) do %>
+    <fieldset>
+      <%= hidden_field :name => :opponent_id, :value => @opponent.id %>
+      <p><%= text_control :board_size, :label => 'Board Size' %></p>
+      <p><%= submit_field :value => 'Send Invite' %></p>
+    </fieldset>
+  <% end %>
+</div>

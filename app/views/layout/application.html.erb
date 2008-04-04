@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Go Play!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<%= css_include_tag 'master' %>
+<%= css_include_tag 'thickbox' %>
+
+<%= js_include_tag 'jquery' %>
+<%= js_include_tag 'jquery.corner' %>
+<%= js_include_tag 'jquery.timers' %>
+<%= js_include_tag 'jquery.form' %>
+<%= js_include_tag 'jquery.scrollto' %>
+<%= js_include_tag 'thickbox' %>
+<%= js_include_tag 'application' %>
+<%= js_include_tag 'go_game' %>
+
+<%= catch_content :for_head %>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+<div id="innerwrapper">
+
+<div id="mainframe">
+
+<div id="contentframe">
+
+<div id="letterhead">
+  
+  <% if logged_in? %>
+  <div id="loggedin">
+    <p>Welcome, <%= current_user.name %></p>
+    <p><a href="/users/current/edit">Profile</a> | <a href="/logout">Logout</a></p>
+  </div>
+  <% end %>
+  
+  <h3>Go Play!</h3>
+  <p>
+    An online Go experience...
+  </p>
+  <p>
+    <a href="/">Home</a>
+  </p>
+</div>
+
+<%= catch_content :for_layout %>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="footer">
+  A <a href="http://www.benhughes.name/">Ben Hughes</a> Production &nbsp;|&nbsp; Created with <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.merbivore.com/">Merb</a>, <a href="http://www.datamapper.com/">DataMapper</a>, and <a href="http://www.jquery.com/">jQuery</a>
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3202633-5");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+
+</body>
+</html>

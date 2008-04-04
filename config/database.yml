@@ -1,0 +1,14 @@
+:development: &defaults
+  :adapter: mysql
+  :database: goplay_dev
+  :username: goplay
+  :password: gp0102
+  :host: localhost
+
+:test:
+  <<: *defaults
+  :database: sample_test
+
+:production:
+  <<: *defaults
+  :database: sample_production
