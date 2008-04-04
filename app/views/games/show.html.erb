@@ -1,0 +1,115 @@
+<script language="JavaScript">
+$(document).ready(function() {
+  game = new GoGame({
+    board: {
+      id: 'gameboard',
+      size: <%= @game.board_size %>
+    },
+    chatbox: 'chatbox',
+    user: {
+      id: <%= current_user.id %>,
+      name: "<%= current_user.name %>",
+      description: "<%= current_user.description %>"
+    },
+    game: {
+      id: <%= @game.id %>,
+      size: <%= @game.board_size %>,
+      color: "<%= @game.white_player == current_user ? 'white' : 'black' %>",
+      opponent: {
+        id: <%= @opponent.id %>,
+        name: "<%= @opponent.name %>",
+        description: "<%= @opponent.description %>",
+        color: "<%= @game.white_player == @opponent ? 'white' : 'black' %>"
+      }
+    }
+  });
+  
+  $('#send_message_form').ajaxForm(function() {
+    $(this).clearForm();
+  });
+  
+  
+  
+});
+</script>
+
+<div class="leftcolumn">
+  <h1><%= @game.white_player.name %> vs. <%= @game.black_player.name %></h1>
+  
+  <%= message_block :on => :user %>
+  
+  <div id="inviteslist">
+    
+    <% if @game.status == 'Created' %>
+    <div id="invitee" class="invite">
+      <img src="/images/avatars/bhughes.jpg" />
+      <h4>Awaiting Invite Response From:</h4>
+      <span><%= h @opponent.name %></span>
+      <%= h @opponent.description %>
+      <br style="clear: both" />
+    </div>
+    <% end %>
+    
+    <div id="rejectedinvite" class="invite" style="display: none">
+      <h4>Invite Rejected</h4>
+      <span>Sorry, but your invite was rejected.</span>
+      <%= link_to 'Back to Home', url(:users) %>
+    </div>
+    
+  </div>
+  
+  <div id="gameboard">
+    <div id="svgboard">
+      
+      
+      <!--
+      <svg:svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
+        
+        <% 1.upto(9) do |i| %>
+          <line x1="<%= 40 * i %>" y1="40" x2="<%= 40 * i %>" y2="420" style="stroke: #000000; stroke-width: 1" />
+        <% end %>
+        
+        <% 1.upto(9) do |i| %>
+          <line x1="40" y1="<%= 40 * i %>" x2="420" y2="<%= 40 * i %>" style="stroke: #000000; stroke-width: 1" />
+        <% end %>
+        
+        <circle cx="40" cy="40" r="14" stroke="black" stroke-width="2" fill="white" />
+        <circle cx="40" cy="120" r="14" stroke="black" stroke-width="2" fill="white" />
+        
+        <circle cx="120" cy="80" r="14" stroke="black" stroke-width="2" fill="black" />
+        <circle cx="320" cy="160" r="14" stroke="black" stroke-width="2" fill="black" />
+        
+        <circle cx="280" cy="120" r="14" stroke="black" stroke-width="2" fill="black" />
+        
+      </svg:svg>
+      -->
+      
+    </div>
+    <div id="controls">
+      
+      <br /><h2>Controls Go Here</h2>
+      
+    </div>
+  </div>
+  
+</div>
+
+<div class="rightcolumn">
+  
+  <h1>Chat</h1>
+  <div id="chatbox">
+    <div id="messagelist">
+    </div>
+    <div id="sendmessage">
+      <% form_for :message, :action => url(:messages), :id => 'send_message_form' do %>
+        <fieldset>
+          <p><%= text_control :message, :style => 'width: 99%' %></p>
+          <p><%= submit_field :value => 'Send Message' %></p>
+        </fieldset>
+      <% end %>
+    </div>
+  </div>
+  
+</div>
+
+<div style="clear: both"></div>

@@ -1,0 +1,22 @@
+Basic TODO
+===========================
+* Avatar Uploading
+* Better Invite Management System (Support in-game requests and multiple windows)
+* Turn Management
+* Detect Obvious Invalid move and error system
+* Implement controls bar with (pass) button, instructional information
+* Tooltips when clicking on already-moved pieces
+* Fix white bar at bottom and top when in strict XHTML mode
+* Decrease size of avatars and add alternate row styling to users list
+* Safari connection lockout issues?
+* Highlight or fade in new moves
+* Reduce large size of header bar
+* Implement window onLeave checking and potential logout
+* Implement alive pinging every 20 seconds
+* Implement auto-logout every 30 seconds
+* Chat timestamps
+
+New Major Features
+===========================
+* Game history and rankings
+* Administrative Interface

@@ -3,8 +3,8 @@ class Moves < Application
   
   before :login_required
   
-  before :get_moves, :only => [:index]
-  before :get_move, :exclude => [:index, :new, :create]
+  before :fetch_all_moves, :only => [:index]
+  before :fetch_move, :exclude => [:index, :new, :create]
   
   # GET /game/1/moves
   def index
@@ -21,9 +21,13 @@ class Moves < Application
   
   # POST /game/1/moves
   def create
-    @move = Move.new(params[:mof])
+    fetch_game
+    @move = Move.new(:row => params[:row], :column => params[:column])
+    @move.game = @game
+    @move.user = current_user
+    
     if @move.save
-      redirect url(:mof, @mof)
+      ''
     else
       render :new
     end
@@ -34,7 +38,7 @@ class Moves < Application
     @move = Move.first(params[:id])
     raise NotFound unless @mof
     if @move.destroy!
-      redirect url(:mof)
+      redirect url(:moves)
     else
       raise BadRequest
     end
@@ -43,19 +47,20 @@ class Moves < Application
   
   private
   
-  def get_game
-    @game = Game[params[:id]]
+  def fetch_game
+    @game = Game[params[:game_id].to_i]
+    @game = nil unless [@game.white_player, @game.black_player].include?(current_user)
     raise NotFound unless @game
   end
   
-  def get_moves
-    get_game
+  def fetch_all_moves
+    fetch_game
     @moves = @game.moves
   end
   
-  def get_move
-    get_game
-    @move = @game.moves.first(params[:id])
+  def fetch_move
+    fetch_game
+    @move = Move.all(:id => params[:id], :game_id => @game.id)
     raise NotFound unless @move
   end
   

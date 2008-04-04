@@ -43,9 +43,9 @@ class Users < Application
   # PUT /users/1
   def update
     if @user.update_attributes(params[:user])
-      redirect url(:user, @user)
+      redirect url(:users)
     else
-      raise BadRequest
+      render :edit
     end
   end
   

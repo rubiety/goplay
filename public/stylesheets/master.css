@@ -423,11 +423,9 @@ ol li {
 }
 
 #gameboard #svgboard {
-  padding: 15px;
   height: 500px;
   background-color: #EDFBAF;
   border: 1px solid #333333;
-  text-align: center;
 }
 
 #gameboard #controls {

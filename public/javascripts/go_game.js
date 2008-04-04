@@ -5,7 +5,7 @@
  * 
  * Author: Ben Hughes, ben -yaYt- railsgarden -daht- com
  * 
- * Dependencies: jQuery, ThickBox, jQuery.svg
+ * Dependencies: jQuery, jQuery.svg, Facebox
  * 
  * GoGame Class
  * --------
@@ -41,6 +41,7 @@ var GoGame = function(options) {
 
 /*** Configuration ***/
 
+GoGame.POLL_FREQUENCY = '2s';
 GoGame.BOARD_HEIGHT = 440;
 GoGame.BOARD_WIDTH = 440;
 GoGame.BOARD_TOP = 30;
@@ -53,15 +54,12 @@ GoGame.PIECE_RADIUS_DIVISOR = 2.4;
 GoGame.prototype = {
   
   initialize: function() {
-    this.title = 'Go Game';
-    this.author = 'Ben Hughes';
-    
     this.createGameBoard();
     this.startEventPoller();
   },
   
   createGameBoard: function() {
-    if (!this.game || !this.board || !this.board.id) { return; }
+    if (!this.game || !this.board || !this.board.id || this.svgboard) { return; }
     
     if (!this.board.width) { this.board.width = GoGame.BOARD_WIDTH; }
     if (!this.board.height) { this.board.height = GoGame.BOARD_HEIGHT; }
@@ -94,6 +92,8 @@ GoGame.prototype = {
       this.createPiece(i, i, (i % 2) ? 'white' : 'black');
     }
     
+    // Initialize Click Listener
+    $('#' + this.board.id + ' #svgboard').bind('click', this, this.onBoardClick);
   },
   
   // TODO: Refactor
@@ -107,7 +107,7 @@ GoGame.prototype = {
   },
   
   startEventPoller: function() {
-    $(this).everyTime('10s', 'eventpoller', this.pollEvent);
+    $(this).everyTime(GoGame.POLL_FREQUENCY, 'eventpoller', this.pollEvent);
   },
   
   pollEvent: function() {
@@ -131,6 +131,9 @@ GoGame.prototype = {
           case 'GameInviteResponseEvent':
             tthis.onGameInviteResponse(event.payload);
             break;
+          case 'MoveEvent':
+            tthis.onMove(event.payload);
+            break;
           case 'GameEndEvent':
             tthis.onGameEnd(event.payload);
             break;
@@ -150,7 +153,7 @@ GoGame.prototype = {
       '  ' + '<br />' + 
       '  <a href="/games/new?height=400&width=600&opponent_id=' + data.source_user.id + '" title="Challenge ' + data.source_user.name + ' to Game" class="thickbox">Challenge to Game</a>' + 
       '  <br style="clear: both" />' + 
-      '  <script language="JavaScript">tb_init("a.thickbox, area.thickbox, input.thickbox");</script>' +
+      '  <script language="JavaScript">$("a[rel*=facebox]").facebox();</script>' +
       '</div>'
     ));
     
@@ -199,7 +202,7 @@ GoGame.prototype = {
   },
   
   onMove: function(data) {
-    $('<h3>Move Made...</h3>').appendTo('#gameboard');
+    this.createPiece(parseInt(data.row), parseInt(data.column), this.game.opponent.color);
   },
   
   onGameEnd: function(data) {
@@ -210,6 +213,20 @@ GoGame.prototype = {
     $('<h2>Player Accepted! Starting Game...</h2>').appendTo('#gameboard');
     
     this.createGameBoard();
+  },
+  
+  onBoardClick: function(e) {
+    tthis = e.data;
+    
+    var x = e.pageX - this.offsetLeft;
+  	var y = e.pageY - this.offsetTop;
+  	
+  	row = Math.round((y - tthis.board.top) / tthis.board.rowSize);
+  	column = Math.round((x - tthis.board.left) / tthis.board.columnSize);
+  	
+  	tthis.createPiece(row, column, tthis.game.color);
+  	
+  	$.post('/games/' + tthis.game.id + '/moves', { row: row, column: column });
   }
   
 };

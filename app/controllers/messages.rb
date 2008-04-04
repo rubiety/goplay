@@ -33,7 +33,7 @@ class Messages < Application
     @message.user = current_user
     
     if @message.save
-      redirect url(:message, @message)
+      ""
     else
       render :new
     end

@@ -22,7 +22,7 @@ $(document).ready(function() {
   <%= message_block :on => :user %>
   
   <div class="formbox">
-    <% form_for :user, :action => url(:users) do %>
+    <% form_for :user, :action => url(:user, :id => 'current') do %>
       <fieldset>
         <p><%= text_control :first_name, :label => 'First Name' %></p>
         <p><%= text_control :last_name, :label => 'Last Name' %></p>

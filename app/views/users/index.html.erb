@@ -29,7 +29,7 @@ $(document).ready(function() {
       <span><%= h user.name %></span>
       <%= h user.description %>
       <br />
-      <a href="/games/new?height=400&width=600&opponent_id=<%= user.id %>" title="Challenge <%= user.name %> to Game" class="thickbox">Challenge to Game</a>
+      <a href="/games/new?height=400&width=600&opponent_id=<%= user.id %>" title="Challenge <%= user.name %> to Game" rel="facebox">Challenge to Game</a>
     </div>
     <% end %>
   </div>

@@ -16,21 +16,27 @@ class Move < DataMapper::Base
   
   has_many :captures
   
+  after_create :spawn_event
   before_save :check_move
   before_save :update_board
   after_save :create_captures
   
   private
   
+  def spawn_event
+    MoveEvent.new(self).enqueue
+    true
+  end
+  
   def check_move
-    
+    true
   end
   
   def update_board
-    
+    true
   end
   
   def create_captures
-    
+    true
   end
 end
