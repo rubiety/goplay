@@ -1,5 +1,5 @@
 module Merb
-    module EventsHelper
-
-    end
+  module EventsHelper
+    
+  end
 end

@@ -1,3 +1,8 @@
+# == Messages Controller
+# Standard REST resource representing a "message".  Can be used in 
+# both global context and game context, which represents messages 
+# only for a particular game.
+# 
 class Messages < Application
   provides :xml, :yaml, :js
   
@@ -33,7 +38,7 @@ class Messages < Application
     @message.user = current_user
     
     if @message.save
-      ""
+      redirect url(:users)
     else
       render :new
     end
@@ -56,5 +61,5 @@ class Messages < Application
     @message = @game ? @game.messages.first(params[:id]) : Message[params[:id]]
     raise NotFound unless @message
   end
-
+  
 end

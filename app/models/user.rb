@@ -1,6 +1,18 @@
 require 'digest/sha1'
 require File.join(File.dirname(__FILE__), '..', '..', "lib", "authenticated_system", "authenticated_dependencies") rescue nil
 
+# == User
+# Represents a user in the system.  Activity is stored using the +active+ flag
+# which should be kept current for accurate user list information.
+# 
+# === Entering & Leaving
+# User entering and leaving is handled with the +enter!+ and +leave!+ methods
+# which take care of broadcasting the appropriate events to all active clients as 
+# well as updating the aforementioned +active+ flag. 
+# 
+# === Suspending Users
+# Users can also be suspended 
+# 
 class User < DataMapper::Base
   include AuthenticatedSystem::Model
   
@@ -19,6 +31,10 @@ class User < DataMapper::Base
   property :active, :boolean
   property :created_at, :datetime
   property :updated_at, :datetime
+  property :last_login_at, :datetime
+  property :suspended_at, :datetime
+  property :suspended_reason, :text
+  property :last_pinged_at, :datetime
   
   has_many :events
   has_many :messages
@@ -36,30 +52,57 @@ class User < DataMapper::Base
   
   before_save :encrypt_password
   
+  # Easy Record Retrieval by Login
+  def self.with_login_of(login)
+    self.first(:login => login)
+  end
+  
   def login=(value)
     @login = value.downcase unless value.nil?
   end
   
+  # User full name
   def name
     "#{first_name} #{last_name}"
   end
   
+  # User handle - for now defaults ot login
   def handle
     self.login
   end
   
-  def enter
+  # Makes the user active and broadcasts a user entered event
+  def enter!
     self.active = true
     self.save
     
     UserEnteredEvent.new(self).enqueue_for_all_active_users
+    self
   end
   
-  def leave(reason = 'Logout')
+  # Makes the user inactive and broadcasts a user left event
+  def leave!(reason = 'Logout')
     self.active = false
     self.save
     
     UserLeftEvent.new(self, 'Logout').enqueue_for_all_active_users
+    self
+  end
+  
+  # Suspends a user, allowing him to not login with an optional error message
+  def suspend!(reason = nil)
+    self.active = false
+    self.suspended_at = Time.now
+    self.suspended_reason = reason
+    self.save
+    self
+  end
+  
+  # Updates the last_pinged_at timestamp to keep the user "alive"
+  def pinged!
+    self.last_pinged_at = Time.now
+    self.save
+    self
   end
 end
 

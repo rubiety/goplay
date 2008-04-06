@@ -1,3 +1,12 @@
+# == Remote Event
+# Forms the model layer foundation to the remote events polling system 
+# as described fully in +Events+.  
+# 
+# Acts as a base for single-table inheritance which occurs automatically 
+# as part of DataMapper.  Most subclasses will define constructors that 
+# set a hash-based "payload" which subsequently gets stored and retrieved 
+# as a YAML-serialized field in the model.
+# 
 class Event < DataMapper::Base
   property :type, :class
   property :user_id, :integer
@@ -13,15 +22,17 @@ class Event < DataMapper::Base
   belongs_to :source_user, :class => 'User', :foreign_key => 'source_user_id'
   belongs_to :game
   
-  
   before_save :encode_payload
   after_materialize :decode_payload
   
+  # Sets a blank payload; should be implemented by subclasses.
   def initialize
     self.payload = {}
     super
   end
   
+  # Special method that will get called when the array of Event objects 
+  # has +to_json+ called on it.  Returns a JSON representation of the event.
   def to_json
     {:type => type, :game_id => game ? game.id : nil, :payload => payload}.to_json
   end

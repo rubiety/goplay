@@ -1,0 +1,43 @@
+* A given player can engage in multiple games at the same time (in different tabs/windows) each with a different
+  URL such as /games/23-bhughes-vs-dleveille. 
+
+* Invites are treated something like a specialized chat message event in that multiple invites can come in and
+  be displayed. Invites will even show in-game so if you accept a new tab with a new game will open.
+
+* Remote events queuing on the server side is completely isolated from controllers as remote events are spawned
+  automatically using DataMapper callbacks on the main model classes. So, for example, creating a new Message
+  object without an associated game will automatically generate a remote event broadcast when you save it
+  without ever explicitly dealing with any MessageEvent object.
+  
+* Highly abstract JavaScript objects architecture with separated concerns. The remote events class handles
+  polling for remote events and allows other objects to "subscribe" to each of these events, forming an
+  excellent basic publish/subscribe model for remote events. Other classes such as ChatClient and GoClient can
+  then subscribe to the events they want to see and handle them separately.
+  
+* Deliberately no "admin interface" since anything administrative I need to do is accomplished very easy through
+  an interactive Ruby console as a result of the abstracted and well-factored nature of the object model; 
+  example administrative actions:
+  
+  # Suspend user with note:
+  ruby> User.with_login_of('bhughes').suspend! 'You are using too much bandwidth.'
+  
+  # Send message as user:
+  ruby> User.with_login_of('bhughes').messages.create :message => 'My Global Notice'
+  
+  # Force End Game 23:
+  ruby> Game[23].complete!
+  
+  # Change User's Description:
+  ruby> User.with_login_of('jdoe').update_attributes :description => 'New Description'
+  
+  # Force User Logout:
+  ruby> User.with_login_of('jdoe').leave!
+  
+* Strong tracking of user activity with request polling and separate "ping" client posts that keep the client 
+  alive even when event polling need not occur (such as when editing your profile).  Makes every effort to 
+  accurately identify when a client has left a game or the entire application using on leave callbacks and 
+  inference from the client pings and event polling timestamps.
+
+
+  
+  

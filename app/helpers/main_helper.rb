@@ -1,5 +1,5 @@
 module Merb
-    module MainHelper
-
-    end
+  module MainHelper
+    
+  end
 end

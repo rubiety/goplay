@@ -1,5 +1,5 @@
 module Merb
-    module UsersHelper
-
-    end
+  module UsersHelper
+    
+  end
 end

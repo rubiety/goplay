@@ -15,8 +15,14 @@ Basic TODO
 * Implement alive pinging every 20 seconds
 * Implement auto-logout every 30 seconds
 * Chat timestamps
+* Capistrano deployment to goplay.rubiety.com
+* Replace header image with small go board
+* OpenID Authentication
+* Implement suspended users on the controller/view side
+* User pinging
 
 New Major Features
 ===========================
 * Game history and rankings
 * Administrative Interface
+* Refactor GoGame class into: RemoteEventPoller, ChatClient, GoClient

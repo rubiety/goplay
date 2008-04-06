@@ -1,3 +1,9 @@
+# == Game Moves
+# Standard REST resource representing a move in a game.
+# Creating a move implies a user making a move within a game.
+# Can only be used within game context.  Moves can only be listed 
+# or created. 
+# 
 class Moves < Application
   provides :xml, :yaml, :js
   
@@ -27,20 +33,9 @@ class Moves < Application
     @move.user = current_user
     
     if @move.save
-      ''
+      redirect url(:users)
     else
       render :new
-    end
-  end
-  
-  # DELETE /game/1/moves/1
-  def destroy
-    @move = Move.first(params[:id])
-    raise NotFound unless @mof
-    if @move.destroy!
-      redirect url(:moves)
-    else
-      raise BadRequest
     end
   end
   

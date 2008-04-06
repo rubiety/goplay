@@ -1,3 +1,6 @@
+# == Games
+# A tradional REST resource representing a game.  
+# 
 class Games < Application
   provides :xml, :yaml, :js
   
@@ -15,10 +18,9 @@ class Games < Application
   # GET /games/1
   def show
     @message = Message.new
-    @opponent = @game.white_player == current_user ? @game.black_player : @game.white_player
+    @opponent = @game.opponent(current_user)
     content_type :html
-    headers['Content-Type'] = 'application/xhtml+xml'
-    render
+    render_compound_document
   end
   
   # GET /games/new
@@ -26,12 +28,6 @@ class Games < Application
     only_provides :html
     @game = Game.new
     render :layout => false
-  end
-  
-  # GET /games/1/edit
-  def edit
-    only_provides :html
-    render
   end
   
   # POST /games
@@ -59,24 +55,6 @@ class Games < Application
     redirect url(:users)
   end
   
-  # PUT /games/1
-  def update
-    if @game.update_attributes(params[:game])
-      redirect url(:game, @game)
-    else
-      render :edit
-    end
-  end
-  
-  # DELETE /games/1
-  def destroy
-    if @game.destroy!
-      redirect url(:game)
-    else
-      raise BadRequest
-    end
-  end
-  
   
   private
   
@@ -91,6 +69,12 @@ class Games < Application
   
   def fetch_opponent
     @opponent = User[params[:opponent_id].to_i] if params[:opponent_id]
+  end
+  
+  # Correctly handles compound document rendering with MIME type
+  def render_compound_document(*args)
+    headers['Content-Type'] = 'application/xhtml+xml'
+    render(*args)
   end
   
 end

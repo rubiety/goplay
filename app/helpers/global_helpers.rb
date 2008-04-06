@@ -36,5 +36,7 @@ module Merb
       
       "<div id=\"message_block\" class=\"flash\">#{out}</div>"
     end
+    
+    
   end
 end

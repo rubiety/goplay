@@ -1,3 +1,12 @@
+# == Chat Message
+# Represents a chat message sent either globally, 
+# in which case +game_id+ is NULL, or to a specific game in which 
+# +game_id+ is populated.  
+# 
+# === Event Spawning
+# The remote events that broadcast the event to the target user(s) 
+# are handled automatically through the +spawn_event+ after_create callback.
+# 
 class Message < DataMapper::Base
   property :game_id, :integer
   property :user_id, :integer
