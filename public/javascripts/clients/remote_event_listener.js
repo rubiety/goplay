@@ -3,28 +3,28 @@
  * 
  * Remote Event Listener
  * 
- * Author: Ben Hughes, ben -yaYt- railsgarden -daht- com
- * 
+ * Author: Ben Hughes, http://www.railsgarden.com/
  * Dependencies: jQuery, jQuery.svg, Facebox
  * 
- * RemoteEventListener Class
+ * RemoteEventsListener Class
  * --------
  * 
  * 
  * Example Usage
  * --------
  * 
- * remoteEvents = new RemoteEventListener('/events', {frequency: '1s'});
+ * remoteEvents = new RemoteEventsListener('/events', {frequency: '1s'});
  * 
  **********************************************************/
 
-var RemoteEventListener = function(url, options) {
+var RemoteEventsListener = function(url, options) {
   this.initialize(url, options);
 };
 
-RemoteEventListener.prototype = {
+RemoteEventsListener.prototype = {
   
   initialize: function(url, options) {
+    options = options || {};
     this.url = url;
     this.frequency = options.frequency || '1s';
     this.events = {};
@@ -33,11 +33,9 @@ RemoteEventListener.prototype = {
   },
   
   on: function(eventType, callback) {
-    this.events[eventType] ? this.events[eventType].push(callback) : this.events[eventType] = [callback];
-  },
-  
-  off: function(eventType, callback) {
+    if (!this.events[eventType]) { this.events[eventType] = new Array(); }
     
+    this.events[eventType].push(callback);
   },
   
   startEventPoller: function() {
@@ -50,13 +48,13 @@ RemoteEventListener.prototype = {
         
         for (eventType in this.events) {
           if (event.type == eventType) {
-            for (callback in this.events[eventType]) {
-              callback.call(event);
+            for (i = 0; i < this.events[eventType].length; i++) {
+              this.events[eventType][i](event);
             }
           }
         }
       });
     });
-  },
+  }
   
 }

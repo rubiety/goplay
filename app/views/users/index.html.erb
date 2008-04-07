@@ -1,13 +1,10 @@
 <script language="JavaScript">
 $(document).ready(function() {
-  new GoGame({
-    chatbox: 'chatbox',
-    user: {
-      id: <%= current_user.id %>,
-      name: "<%= current_user.name %>",
-      description: "<%= current_user.description %>"
-    },
-  });
+  events = new RemoteEventsListener('/users/current/events');
+  
+  new UserListClient('userslist', events);
+  new GameInvitesClient('inviteslist', events);
+  new ChatClient('messageslist', events);
   
   $('#send_message_form').ajaxForm(function() {
     $(this).clearForm();
@@ -40,7 +37,7 @@ $(document).ready(function() {
   
   <h1>Chat</h1>
   <div id="chatbox">
-    <div id="messagelist">
+    <div id="messageslist">
     </div>
     <div id="sendmessage">
       <% form_for :message, :action => url(:messages), :id => 'send_message_form' do %>

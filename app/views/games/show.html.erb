@@ -1,11 +1,10 @@
 <script language="JavaScript">
 $(document).ready(function() {
-  game = new GoGame({
-    board: {
-      id: 'gameboard',
-      size: <%= @game.board_size %>
-    },
-    chatbox: 'chatbox',
+  events = new RemoteEventsListener('/users/current/events');
+  
+  new ChatClient('messageslist', events);
+  
+  new GoClient('gameboard', events, {
     user: {
       id: <%= current_user.id %>,
       name: "<%= current_user.name %>",
@@ -27,8 +26,6 @@ $(document).ready(function() {
   $('#send_message_form').ajaxForm(function() {
     $(this).clearForm();
   });
-  
-  
   
 });
 </script>
@@ -98,7 +95,7 @@ $(document).ready(function() {
   
   <h1>Chat</h1>
   <div id="chatbox">
-    <div id="messagelist">
+    <div id="messageslist">
     </div>
     <div id="sendmessage">
       <% form_for :message, :action => url(:messages), :id => 'send_message_form' do %>

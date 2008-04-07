@@ -13,7 +13,8 @@
  * 
  **********************************************************/
 
-var UserListClient = function(usersbox, listener, options = {}) {
+var UserListClient = function(usersbox, listener, options) {
+  options = options || {};
   this.usersbox = usersbox;
   this.listener = listener;
 };

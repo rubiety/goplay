@@ -393,7 +393,7 @@ ol li {
 	margin-bottom: 10px;
 }
 
-#chatbox #messagelist {
+#chatbox #messageslist {
   height: 300px;
   background-color: #EDFBAF;
   border: 1px solid #666666;
@@ -402,11 +402,11 @@ ol li {
   margin-bottom: 8px;
 }
 
-#chatbox #messagelist .message {
+#chatbox #messageslist .message {
   padding-bottom: 5px;
 }
 
-#chatbox #messagelist .message span {
+#chatbox #messageslist .message span {
   font-weight: bold;
 }
 

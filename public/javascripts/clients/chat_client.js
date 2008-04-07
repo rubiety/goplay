@@ -13,8 +13,11 @@
  * 
  **********************************************************/
 
-var ChatClient = function(chatbox, listener, options = {}) {
-  
+var ChatClient = function(chatbox, listener, options) {
+  options = options || {};
+  this.chatbox = chatbox;
+  this.listener = listener;
+  this.initialize();
 };
 
 ChatClient.prototype = {

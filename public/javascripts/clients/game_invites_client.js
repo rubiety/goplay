@@ -13,9 +13,11 @@
  * 
  **********************************************************/
 
-var GameInvitesClient = function(invitesbox, listener, options = {}) {
+var GameInvitesClient = function(invitesbox, listener, options) {
+  options = options || {};
   this.invitesbox = invitesbox;
   this.listener = listener;
+  this.initialize();
 };
 
 GameInvitesClient.prototype = {

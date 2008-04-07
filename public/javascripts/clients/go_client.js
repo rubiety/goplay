@@ -20,8 +20,9 @@
  * 
  **********************************************************/
 
-var GoClient = function(gamebox, listener, options = {}) {
-  this.board = {id: gamebox};
+var GoClient = function(gamebox, listener, options) {
+  options = options || {};
+  this.board = { id: gamebox };
   this.listener = listener;
   this.user = options.user;
   this.game = options.game;
