@@ -5,11 +5,21 @@
  * 
  * Author: Ben Hughes, ben -yaYt- railsgarden -daht- com
  * 
- * Dependencies: jQuery, jQuery.svg, Facebox
+ * Dependencies: jQuery, RemoteEventsListener
  * 
  * GameInvitesClient Class
- * --------
+ * ----------------------------------------
  * 
+ * Handles game invites by other users.  Dynamically fades in
+ * dark boxes to notify the user that an invite has arrived.  Multiple 
+ * invites at the same time are supported.  Meant to be used with GoClient 
+ * and RemoteEventsListener.
+ * 
+ * Example Usage
+ * ----------------------------------------
+ * 
+ * events = new RemoteEventsListener('/users/current/events');
+ * new GameInvitesClient('inviteslist', events);
  * 
  **********************************************************/
 
@@ -23,17 +33,17 @@ var GameInvitesClient = function(invitesbox, listener, options) {
 GameInvitesClient.prototype = {
   
   initialize: function() {
-    this.addEventListeners();
+    this.registerEventListeners();
   },
   
-  addEventListeners: function() {
-    this.listener.on('GameInviteEvent', onUserEntered);
+  registerEventListeners: function() {
+    this.listener.on('GameInviteEvent', this.onGameInvite, this);
   },
   
-  onGameInvite: function(data) {
+  onGameInvite: function(event) {
+    data = event.payload;
     
-    // TODO: Refactor into something better:
-    $('#' + invitesbox).append($(
+    $('#' + this.invitesbox).append($(
       '<div class="invite" style="display: none" id="invites_list_entry_' + data.source_user.id + '">' + 
       '  <img src="/images/avatars/bhughes.jpg" />' +
       '  <h4>New Game Invitation</h4>' +

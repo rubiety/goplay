@@ -45,7 +45,7 @@ $.extend(SVGManager.prototype, {
 				'" height="' + container.clientHeight + '" src="blank.svg"/>';
 			this._settings[id] = [container, loadURL, settings, onLoad];
 		}
-		else if (document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#SVG","1.1")) {
+		else {
 			svg = document.createElementNS(this.svgNS, 'svg');
 			svg.setAttribute('version', '1.1');
 			svg.setAttribute('width', container.clientWidth);
@@ -53,9 +53,7 @@ $.extend(SVGManager.prototype, {
 			container.appendChild(svg);
 			this._afterLoad(id, svg, [container, loadURL, settings, onLoad]);
 		}
-		else {
-			container.innerHTML = '<p class="svg_error">' + this.local.notSupportedText + '</p>';
-		}
+		
 		return id;
 	},
 

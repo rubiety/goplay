@@ -53,7 +53,7 @@ class Board
   def make_move(color, row, column)
     raise MoveTargetExistsError.new unless grid[row][column].nil?
     raise RuleOfKoError.new if detect_rule_of_ko_situation(color, row, column)
-    raise SuicidalMoveError.new if detect_suicidal_move_error(color, row, column)
+    raise SuicidalMoveError.new if detect_suicidal_move_situation(color, row, column)
     
     grid[row][column] = color
     compute_move_captures(color, row, column)

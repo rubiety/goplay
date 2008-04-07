@@ -2,9 +2,9 @@
 $(document).ready(function() {
   events = new RemoteEventsListener('/users/current/events');
   
-  new UserListClient('userslist', events);
-  new GameInvitesClient('inviteslist', events);
-  new ChatClient('messageslist', events);
+  gameInvitesClient = new GameInvitesClient('inviteslist', events);
+  chatClient = new ChatClient('messageslist', events);
+  userListClient = new UserListClient('userslist', events);
   
   $('#send_message_form').ajaxForm(function() {
     $(this).clearForm();

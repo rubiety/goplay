@@ -3,13 +3,20 @@
  * 
  * User List Client
  * 
- * Author: Ben Hughes, ben -yaYt- railsgarden -daht- com
- * 
- * Dependencies: jQuery, jQuery.svg, Facebox
+ * Author: Ben Hughes, http://www.railsgarden.com/
+ * Dependencies: jQuery, RemoteEventsListener, Facebox
  * 
  * UserListClient Class
- * --------
+ * ----------------------------------------
  * 
+ * Handles updating of the list of active users through Ajax events.
+ * Expected to be used with RemoteEventsListener.
+ * 
+ * Example Usage
+ * ----------------------------------------
+ * 
+ * events = new RemoteEventsListener('/users/current/events');
+ * new UserListClient('userslist', events);
  * 
  **********************************************************/
 
@@ -17,22 +24,23 @@ var UserListClient = function(usersbox, listener, options) {
   options = options || {};
   this.usersbox = usersbox;
   this.listener = listener;
+  this.initialize();
 };
 
 UserListClient.prototype = {
   
   initialize: function() {
-    this.addEventListeners();
+    this.registerEventListeners();
   },
   
-  addEventListeners: function() {
-    this.listener.on('UserEnteredEvent', onUserEntered);
-    this.listener.on('UserLeftEvent', onUserLeft);
+  registerEventListeners: function() {
+    this.listener.on('UserEnteredEvent', this.onUserEntered, this);
+    this.listener.on('UserLeftEvent', this.onUserLeft, this);
   },
   
-  onUserEntered: function(data) {
+  onUserEntered: function(event) {
+    data = event.payload;
     
-    // TODO: Refactor into something better:
     $('#' + this.usersbox).append($(
       '<div class="user" style="display: none" id="user_list_entry_' + data.source_user.id + '">' + 
       '  <img src="/images/avatars/bhughes.jpg" />' +
@@ -48,7 +56,9 @@ UserListClient.prototype = {
     $('#' + this.usersbox + ' #user_list_entry_' + data.source_user.id).fadeIn();
   },
   
-  onUserLeft: function(data) {
+  onUserLeft: function(event) {
+    data = event.payload;
+    
     $('#' + this.usersbox + ' #user_list_entry_' + data.source_user.id).fadeOut();
   }
   

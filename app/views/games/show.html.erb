@@ -2,9 +2,9 @@
 $(document).ready(function() {
   events = new RemoteEventsListener('/users/current/events');
   
-  new ChatClient('messageslist', events);
+  chatClient = new ChatClient('messageslist', events);
   
-  new GoClient('gameboard', events, {
+  goClient = new GoClient('gameboard', events, {
     user: {
       id: <%= current_user.id %>,
       name: "<%= current_user.name %>",
@@ -58,7 +58,6 @@ $(document).ready(function() {
   <div id="gameboard">
     <div id="svgboard">
       
-      
       <!--
       <svg:svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
         
@@ -79,7 +78,7 @@ $(document).ready(function() {
         <circle cx="280" cy="120" r="14" stroke="black" stroke-width="2" fill="black" />
         
       </svg:svg>
-      -->
+    -->
       
     </div>
     <div id="controls">

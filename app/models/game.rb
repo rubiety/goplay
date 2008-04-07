@@ -35,7 +35,7 @@ class Game < DataMapper::Base
   property :white_player_id, :integer
   property :black_player_id, :integer
   property :board_size, :integer
-  property :board_state, :text
+  property :board_state, :text, :lazy => false
   property :status, :string   # Created => Accepted => In-Progress => Completed
   property :completed_status, :string  # Win, Draw, Cancelled
   property :white_won, :boolean
@@ -51,7 +51,7 @@ class Game < DataMapper::Base
   
   after_create :spawn_invite_event
   before_save :encode_board_state
-  after_save :decode_board_state
+  after_materialize :decode_board_state
   
   # Constructs the game and sets the initial status to Created
   def initialize(*args)
