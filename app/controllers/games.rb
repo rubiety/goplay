@@ -45,13 +45,13 @@ class Games < Application
   
   # POST /games/1/accept
   def accept
-    @game.accept if @game.black_player == current_user
+    @game.accept! if @game.black_player == current_user
     redirect url(:game, @game)
   end
   
   # POST /games/1/reject
   def reject
-    @game.reject if @game.black_player == current_user
+    @game.reject! if @game.black_player == current_user
     redirect url(:users)
   end
   

@@ -7,20 +7,10 @@
  * 
  * Dependencies: jQuery, jQuery.svg, Facebox
  * 
- * GoGame Class
+ * GoClient Class
  * --------
  * 
- * GoGame operates in two contexts:
- * - In Play - Currently playing a go game with a board and a 
- *   game-specific chat.  In this mode, chat messages are only 
- *   processed that are inside the game (not global messages).
- * - Out of Play - Not currently in a game but listening for all 
- *   global chat messages.  No game board.
- * 
  * Options for constructor:
- * - board: Reference to the board if currently in a game
- * - chatbox: Reference to the chat box
- * - console: A console logging action history
  * - user: Details about the current user
  * - game: An object of game details:
  *   - id: Database ID of the game
@@ -30,18 +20,17 @@
  * 
  **********************************************************/
 
-var GoGame = function(options) {
-  this.board = options.board;
-  this.chatbox = options.chatbox;
-  this.console = options.console;
+var GoClient = function(gamebox, listener, options = {}) {
+  this.board = {id: gamebox};
+  this.listener = listener;
   this.user = options.user;
   this.game = options.game;
+  
   this.initialize();
 };
 
 /*** Configuration ***/
 
-GoGame.POLL_FREQUENCY = '2s';
 GoGame.BOARD_HEIGHT = 440;
 GoGame.BOARD_WIDTH = 440;
 GoGame.BOARD_TOP = 30;
@@ -55,7 +44,7 @@ GoGame.prototype = {
   
   initialize: function() {
     this.createGameBoard();
-    this.startEventPoller();
+    this.addEventListeners();
   },
   
   createGameBoard: function() {
@@ -106,85 +95,10 @@ GoGame.prototype = {
     
   },
   
-  startEventPoller: function() {
-    $(this).everyTime(GoGame.POLL_FREQUENCY, 'eventpoller', this.pollEvent);
-  },
-  
-  pollEvent: function() {
-    tthis = this;
-    
-    $.getJSON('/users/current/events', function(events) {
-      $.each(events, function(i, event) {
-        switch (event.type) {
-          case 'UserEnteredEvent':
-            tthis.onUserEntered(event.payload);
-            break;
-          case 'UserLeftEvent':
-            tthis.onUserLeft(event.payload);
-            break;
-          case 'MessageEvent':
-            tthis.onMessage(event.payload);
-            break;
-          case 'GameInviteEvent':
-            tthis.onGameInvite(event.payload);
-            break;
-          case 'GameInviteResponseEvent':
-            tthis.onGameInviteResponse(event.payload);
-            break;
-          case 'MoveEvent':
-            tthis.onMove(event.payload);
-            break;
-          case 'GameEndEvent':
-            tthis.onGameEnd(event.payload);
-            break;
-        }
-      });
-    });
-  },
-  
-  onUserEntered: function(data) {
-    
-    // TODO: Refactor into something better:
-    $('#userslist').append($(
-      '<div class="user" style="display: none" id="user_list_entry_' + data.source_user.id + '">' + 
-      '  <img src="/images/avatars/bhughes.jpg" />' +
-      '  <span>' + data.source_user.name + '</span>' +
-      '  ' + data.source_user.description +
-      '  ' + '<br />' + 
-      '  <a href="/games/new?height=400&width=600&opponent_id=' + data.source_user.id + '" title="Challenge ' + data.source_user.name + ' to Game" class="thickbox">Challenge to Game</a>' + 
-      '  <br style="clear: both" />' + 
-      '  <script language="JavaScript">$("a[rel*=facebox]").facebox();</script>' +
-      '</div>'
-    ));
-    
-    $('#user_list_entry_' + data.source_user.id).fadeIn();
-  },
-  
-  onUserLeft: function(data) {
-    $('#userslist #user_list_entry_' + data.source_user.id).fadeOut();
-  },
-  
-  onMessage: function(data) {
-    $('<div class="message"><span>' + data.sender.name + ':</span> ' + data.message + '</div>').appendTo('#messagelist');
-    $('#messagelist').scrollTo('div:last');
-  },
-  
-  onGameInvite: function(data) {
-    
-    // TODO: Refactor into something better:
-    $('#inviteslist').append($(
-      '<div class="invite" style="display: none" id="invites_list_entry_' + data.source_user.id + '">' + 
-      '  <img src="/images/avatars/bhughes.jpg" />' +
-      '  <h4>New Game Invitation</h4>' +
-      '  <span>' + data.source_user.name + '</span>' +
-      '  ' + data.source_user.description +
-      '  ' + '<br />' + 
-      '  <a href="/games/' + data.game.id + '/accept">Accept Invite</a> | <a href="/games/' + data.game.id + '/reject">Reject Invite</a>' + 
-      '  <br style="clear: both" />' + 
-      '</div>'
-    ));
-    
-    $('#invites_list_entry_' + data.source_user.id).fadeIn();
+  addEventListeners: function() {
+    this.listener.on('GameInviteResponseEvent', this.onGameInviteResponse);
+    this.listener.on('MoveEvent', this.onMove);
+    this.listener.on('GameEndEvent', this.onGameEnd);
   },
   
   onGameInviteResponse: function(data) {
