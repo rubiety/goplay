@@ -429,11 +429,29 @@ ol li {
 }
 
 #gameboard #controls {
-  margin-top: 10px;
+  margin-bottom: 10px;
   background-color: #DDDDDD;
   height: 60px;
   border: 1px solid #333333;
-  text-align: center;
+  padding: 5px;
+}
+
+#gameboard #controls #turn {
+  display: block;
+  font-weight: bold;
+  color: #990000;
+}
+
+#gameboard #controls #captures {
+  display: block;
+  font-weight: bold;
+  color: #990000;
+}
+
+#gameboard #controls #errors {
+  display: block;
+  font-weight: bold;
+  color: #990000;
 }
 
 

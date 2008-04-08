@@ -32,10 +32,33 @@ class Moves < Application
     @move.game = @game
     @move.user = current_user
     
-    if @move.save
-      redirect url(:users)
+    move_captures = []
+    move_errors = []
+    
+    begin
+      @move.save
+      
+      @move.captures do |capture|
+        move_captures << {:row => capture.row, :column => capture.column}
+      end
+      
+    rescue Board::MoveTargetExistsError => e
+      move_errors << 'Invalid Move: Move target already exists!'
+    rescue Board::RuleOfKoError => e
+      move_errors << 'Invalid Move: Rule of Ko'
+    rescue Board::SuicidalMoveError => e
+      move_errors << 'Invalid Move: This move would be suicidal!'
+    end
+    
+    case content_type
+    when :xml
+      {:errors => move_errors, :captures => move_captures}.to_xml
+    when :yaml
+      {:errors => move_errors, :captures => move_captures}.to_yaml
+    when :js
+      {:errors => move_errors, :captures => move_captures}.to_json
     else
-      render :new
+      redirect url(:users)
     end
   end
   

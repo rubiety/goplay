@@ -56,35 +56,12 @@ $(document).ready(function() {
   </div>
   
   <div id="gameboard">
-    <div id="svgboard">
-      
-      <!--
-      <svg:svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">
-        
-        <% 1.upto(9) do |i| %>
-          <line x1="<%= 40 * i %>" y1="40" x2="<%= 40 * i %>" y2="420" style="stroke: #000000; stroke-width: 1" />
-        <% end %>
-        
-        <% 1.upto(9) do |i| %>
-          <line x1="40" y1="<%= 40 * i %>" x2="420" y2="<%= 40 * i %>" style="stroke: #000000; stroke-width: 1" />
-        <% end %>
-        
-        <circle cx="40" cy="40" r="14" stroke="black" stroke-width="2" fill="white" />
-        <circle cx="40" cy="120" r="14" stroke="black" stroke-width="2" fill="white" />
-        
-        <circle cx="120" cy="80" r="14" stroke="black" stroke-width="2" fill="black" />
-        <circle cx="320" cy="160" r="14" stroke="black" stroke-width="2" fill="black" />
-        
-        <circle cx="280" cy="120" r="14" stroke="black" stroke-width="2" fill="black" />
-        
-      </svg:svg>
-    -->
-      
-    </div>
     <div id="controls">
-      
-      <br /><h2>Controls Go Here</h2>
-      
+      <span id="turn"></span>
+      <span id="captures"></span>
+      <span id="errors"></span>
+    </div>
+    <div id="svgboard">
     </div>
   </div>
   

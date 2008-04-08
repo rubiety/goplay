@@ -82,8 +82,19 @@ GoClient.PIECE_RADIUS_DIVISOR = 2.4;
 GoClient.prototype = {
   
   initialize: function() {
+    this.retrieveGameInformation();
     this.createGameBoard();
     this.registerEventListeners();
+    
+    // Initialize Turn
+    this.myTurn = (this.game.color == 'white') ? true : false;
+    this.updateTurn();
+    this.captures = 0;
+  },
+  
+  // TODO: Retrieve game information by Ajax instead of in-line object notation
+  retrieveGameInformation: function() {
+    
   },
   
   createGameBoard: function() {
@@ -113,11 +124,6 @@ GoClient.prototype = {
     
     for (i = 0; i < this.board.columns; i++) {
       this.svgboard.line(null, this.board.left + this.board.columnSize * i, this.board.left, this.board.left + this.board.columnSize * i, this.board.left + this.board.height, {stroke: 'black', stroke_width: 1});
-    }
-    
-    // Create some example pieces
-    for (i = 0; i < 9; i++) {
-      this.createPiece(i, i, (i % 2) ? 'white' : 'black');
     }
     
     // Initialize Click Listener
@@ -159,6 +165,9 @@ GoClient.prototype = {
   onMove: function(event) {
     data = event.payload;
     this.createPiece(parseInt(data.row), parseInt(data.column), this.game.opponent.color);
+    
+    this.toggleTurn();
+    this.updateTurn();
   },
   
   onGameEnd: function(event) {
@@ -167,24 +176,68 @@ GoClient.prototype = {
   },
   
   startGame: function(event) {
-    data = event.payload;
     $('<h2>Player Accepted! Starting Game...</h2>').appendTo('#gameboard');
     
     this.createGameBoard();
   },
   
   onBoardClick: function(event) {
-    tthis = event.data;
+    thisobj = event.data;
+    
+    if (!thisobj.myTurn) { return; }
     
     var x = event.pageX - this.offsetLeft;
   	var y = event.pageY - this.offsetTop;
   	
-  	row = Math.round((y - tthis.board.top) / tthis.board.rowSize);
-  	column = Math.round((x - tthis.board.left) / tthis.board.columnSize);
+  	row = Math.round((y - thisobj.board.top) / thisobj.board.rowSize);
+  	column = Math.round((x - thisobj.board.left) / thisobj.board.columnSize);
   	
-  	tthis.createPiece(row, column, tthis.game.color);
+  	thisobj.createPiece(row, column, thisobj.game.color);
   	
-  	$.post('/games/' + tthis.game.id + '/moves', { row: row, column: column });
+  	$.post('/games/' + thisobj.game.id + '/moves', { row: row, column: column }, function(data) {
+  	  
+  	  if (data.errors.length == 0) {
+  	    thisobj.toggleTurn();
+    	  thisobj.updateTurn();
+    	  
+    	  for (i = 0; i < data.captures.length; i++) {
+    	    capture = data.captures[i];
+    	    thisobj.pieceCaptured(capture.row, capture.column)
+    	  }
+    	  
+    	} else {
+    	  thisobj.showErrors(data.errors);
+    	}
+    	
+  	}, 'json');
+  },
+  
+  pieceCaptured: function(row, column) {
+    thisobj.removePiece(row, column);
+    this.captures++;
+    
+    $('#' + this.board.id + ' #controls #captures').text('Captures: ' + this.captures);
+  },
+  
+  // TODO: Refactor into something better...
+  showErrors: function(errors) {
+    if (!errors || errors.length == 0) {
+      $('#' + this.board.id + ' #controls #errors').text('');
+    } else {
+      $('#' + this.board.id + ' #controls #errors').text(errors[0]);
+    }
+  },
+  
+  toggleTurn: function() {
+    this.myTurn = (this.myTurn) ? false : true;
+  },
+  
+  updateTurn: function() {
+    if (this.myTurn) {
+      $('#' + this.board.id + ' #controls #turn').text("Your Turn!");
+    } else {
+      $('#' + this.board.id + ' #controls #turn').text("Opponent's Turn");
+    }
   }
   
 };
