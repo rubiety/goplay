@@ -7,15 +7,11 @@ Basic TODO
 * Tooltips when clicking on already-moved pieces
 * Safari connection lockout issues?
 * Highlight or fade in new moves
-* Implement window onLeave checking and potential logout
-* Implement alive pinging every 20 seconds
-* Implement auto-logout every 30 seconds
 * Chat timestamps
 * Capistrano deployment to goplay.rubiety.com
-* Replace header image with small go board
 * OpenID Authentication
 * Implement suspended users on the controller/view side
-* User pinging
+* RDoc Rake Task
 
 New Major Features
 ===========================

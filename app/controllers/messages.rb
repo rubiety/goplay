@@ -8,7 +8,7 @@ class Messages < Application
   
   before :login_required
   before :fetch_all_messages, :only => [:index]
-  before :fetch_message, :exclude => [:index, :new, :create]
+  before :fetch_message, :exclude => [:index, :create]
   
   # GET /game/1/messages
   # GET /messages
@@ -20,14 +20,6 @@ class Messages < Application
   # GET /messages/1
   def show
     display @message
-  end
-  
-  # GET /game/1/messages/new
-  # GET /messages/new
-  def new
-    only_provides :html
-    @message = Message.new
-    render
   end
   
   # POST /game/1/messages

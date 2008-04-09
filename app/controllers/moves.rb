@@ -17,13 +17,6 @@ class Moves < Application
     display @moves
   end
   
-  # GET /game/1/moves/new
-  def new
-    only_provides :html
-    @mof = Move.new
-    render
-  end
-  
   # POST /game/1/moves
   def create
     fetch_game
