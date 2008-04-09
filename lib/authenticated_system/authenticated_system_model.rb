@@ -69,10 +69,9 @@ module AuthenticatedSystem
       # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
       def authenticate(login, password)
         u = find_activated_authenticated_model_with_login(login) # need to get the salt
-        u && u.authenticated?(password) ? u : nil
+        u && u.authenticated?(password) && u.suspended_at.nil? ? u : nil
       end
     end
-
     
   end
 end

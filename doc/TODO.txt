@@ -7,14 +7,11 @@ Basic TODO
 * Tooltips when clicking on already-moved pieces
 * Safari connection lockout issues?
 * Highlight or fade in new moves
-* Chat timestamps
 * Capistrano deployment to goplay.rubiety.com
 * OpenID Authentication
-* Implement suspended users on the controller/view side
 * RDoc Rake Task
 
 New Major Features
 ===========================
 * Game history and rankings
 * Administrative Interface
-* Refactor GoGame class into: RemoteEventPoller, ChatClient, GoClient
