@@ -464,6 +464,9 @@ ol li {
   color: #990000;
 }
 
+#gameboard #controls #help {
+  margin-top: 12px;
+}
 
 /*** SVG-Related ***/
 

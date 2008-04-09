@@ -3,7 +3,12 @@ $(document).ready(function() {
   events = new RemoteEventsListener('/users/current/events');
   
   chatClient = new ChatClient('messageslist', events, { game_id: <%= @game.id %> });
-  goClient = new GoClient('gameboard', events, { board_id: 'gameboard', game_id: <%= @game.id %>});
+  goClient = new GoClient('gameboard', events, { 
+    board_id: 'gameboard', 
+    game_id: <%= @game.id %>,
+    color: '<%= @game.color_of(current_user).to_s %>', 
+    myTurn: <%= @game.players_turn?(current_user) ? 'true' : 'false' %>
+  });
   
   $('#send_message_form').ajaxForm(function() {
     $(this).clearForm();
@@ -43,7 +48,7 @@ $(document).ready(function() {
   
   <div id="gameboard">
     <div id="controls">
-      <span id="turn"></span>
+      <span id="status"></span>
       <span id="captures"></span>
       <span id="errors"></span>
       

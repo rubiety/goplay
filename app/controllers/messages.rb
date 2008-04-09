@@ -7,7 +7,6 @@ class Messages < Application
   provides :xml, :yaml, :js
   
   before :login_required
-  
   before :fetch_all_messages, :only => [:index]
   before :fetch_message, :exclude => [:index, :new, :create]
   

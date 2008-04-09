@@ -5,6 +5,10 @@ module AuthenticatedSystem
       User.first(:id => id)
     end
     
+    def find_active_authenticated_model_with_id(id)
+      User.first(:id => id, :active => true)
+    end
+    
     def find_authenticated_model_with_remember_token(rt)
       User.first(:remember_token => rt)
     end

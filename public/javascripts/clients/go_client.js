@@ -36,13 +36,7 @@
  **********************************************************/
 
 var GoClient = function(gamebox, listener, options) {
-  options = options || {};
-  this.game_id = options.game_id;
-  this.board_id = options.board_id;
-  this.board = { id: gamebox };
-  this.listener = listener;
-  
-  this.initialize();
+  this.initialize(gamebox, listener, options);
 };
 
 /*** Configuration ***/
@@ -58,7 +52,18 @@ GoClient.PIECE_RADIUS_DIVISOR = 2.4;
 
 GoClient.prototype = {
   
-  initialize: function() {
+  initialize: function(gamebox, listener, options) {
+    options = options || {};
+    this.game_id = options.game_id;
+    this.board_id = options.board_id;
+    this.color = options.color;
+    this.myTurn = options.myTurn || ((options.color == 'white') ? true : false);
+    this.board = { id: gamebox };
+    this.listener = listener;
+    
+    this.active = true;
+    this.captures = 0;
+    
     thisobj = this;
     
     $.getJSON(this.gameUrl(), function(info) {
@@ -68,11 +73,6 @@ GoClient.prototype = {
       
       thisobj.createGameBoard();
       thisobj.registerEventListeners();
-      
-      thisobj.active = true;
-      thisobj.myTurn = (this.color == 'white') ? true : false;
-      thisobj.updateTurn();
-      thisobj.captures = 0;
     });
   },
   
@@ -121,14 +121,27 @@ GoClient.prototype = {
     
     // Initialize Click Listener
     $('#' + this.board_id + ' #svgboard').bind('click', this, this.onBoardClick);
+    
+    // Show Turn Status
+    this.updateTurn();
+    
+    // Initialize Game Board from Piece Information
+    for (i = 0; i < this.game.grid.length; i++) {
+      row = this.game.grid[i];
+      
+      for (j = 0; j < row.length; j++) {
+        cell = row[j];
+        if (cell) {
+          this.createPiece(i, j, cell);
+        }
+      }
+    }
   },
   
-  // TODO: Refactor
   createPiece: function(row, column, color) {
     this.svgboard.circle(null, this.board.left + this.board.columnSize * column, this.board.top + this.board.rowSize * row, this.board.pieceRadius, {fill: color, stroke: 'black', stroke_width: 2});
   },
   
-  // TODO: Refactor
   removePiece: function(row, column) {
     
   },
@@ -151,7 +164,7 @@ GoClient.prototype = {
   
   onMove: function(event) {
     data = event.payload;
-    this.createPiece(parseInt(data.row), parseInt(data.column), this.game.opponent.color);
+    this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
     
     this.toggleTurn();
     this.updateTurn();
@@ -182,13 +195,13 @@ GoClient.prototype = {
   	column = Math.round((x - thisobj.board.left) / thisobj.board.columnSize);
   	
   	// Return if row or column is out of bounds
-  	if (row >= this.game.rowSize || column >= this.game.columnSize) { return; }
-  	
-  	thisobj.createPiece(row, column, thisobj.game.color);
+  	if (row >= thisobj.game.rowSize || column >= thisobj.game.columnSize) { return; }
   	
   	$.post('/games/' + thisobj.game_id + '/moves', { row: row, column: column }, function(data) {
   	  
   	  if (data.errors.length == 0) {
+  	    thisobj.createPiece(row, column, thisobj.color);
+  	    
   	    thisobj.toggleTurn();
     	  thisobj.updateTurn();
     	  
@@ -213,7 +226,6 @@ GoClient.prototype = {
     $('#' + this.board_id + ' #controls #captures').text('Captures: ' + this.captures);
   },
   
-  // TODO: Refactor into something better...
   flash: function(errors) {
     if (!errors || errors.length == 0) {
       $('#' + this.board_id + ' #controls #errors').text('');
@@ -235,6 +247,7 @@ GoClient.prototype = {
   },
   
   onUnload: function(event) {
+    return true;
     
     if (confirm('You are about to leave this game.  This will cause you to forfeit to your opponent.  Are you sure you want to do this?')) {
       $.post('/games/' + event.data + '/leave', {});

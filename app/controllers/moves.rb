@@ -8,7 +8,6 @@ class Moves < Application
   provides :xml, :yaml, :js
   
   before :login_required
-  
   before :fetch_all_moves, :only => [:index]
   before :fetch_move, :exclude => [:index, :new, :create]
   

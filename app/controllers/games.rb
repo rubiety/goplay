@@ -5,7 +5,6 @@ class Games < Application
   provides :xml, :yaml, :js
   
   before :login_required
-  
   before :fetch_all_games, :only => [:index]
   before :fetch_game, :exclude => [:index, :new, :create]
   before :fetch_opponent, :only => [:new, :create]

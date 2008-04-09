@@ -37,6 +37,9 @@ class Move < DataMapper::Base
     computed_captures.each do |computed_capture|
       captures << Capture.new(:row => computed_capture[0], :column => computed_capture[1])
     end
+    
+    game.whites_turn = !self.game.whites_turn;
+    
     true
   end
   

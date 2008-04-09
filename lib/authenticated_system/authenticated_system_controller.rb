@@ -10,7 +10,7 @@ module AuthenticatedSystem
       # Accesses the current user from the session.  Set it to :false if login fails
       # so that future calls do not hit the database.
       def current_user
-        @current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie || :false)
+        @current_user ||= (login_from_session || login_from_basic_auth || :false)
       end
     
       # Store the given user in the session.
@@ -106,7 +106,7 @@ module AuthenticatedSystem
 
       # Called from #current_user.  First attempt to login by the user id stored in the session.
       def login_from_session
-        self.current_user = User.find_authenticated_model_with_id(session[:user]) if session[:user]
+        self.current_user = User.find_active_authenticated_model_with_id(session[:user]) if session[:user]
       end
 
       # Called from #current_user.  Now, attempt to login by basic authentication information.

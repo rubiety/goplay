@@ -36,6 +36,7 @@ class Game < DataMapper::Base
   property :black_player_id, :integer
   property :board_size, :integer
   property :board_state, :text, :lazy => false
+  property :whites_turn, :boolean, :default => true
   property :status, :string   # Created => Accepted => In-Progress => Completed
   property :completed_status, :string  # Win, Draw, Cancelled
   property :white_won, :boolean
@@ -108,11 +109,16 @@ class Game < DataMapper::Base
     nil
   end
   
-  # Determins the player of a particular color
+  # Determines the player of a particular color
   def player_of_color(color)
     return white_player if color.to_sym == :white
     return black_player if color.to_sym == :black
     nil
+  end
+  
+  # Determines if it is currently the given player's turn
+  def players_turn?(current_user)
+    (white_player == current_user && whites_turn) || (black_player == current_user && !whites_turn)
   end
   
   # Makes a move on the board - effectively delegates to board
@@ -126,7 +132,7 @@ class Game < DataMapper::Base
       {
         :game => self.to_hash, 
         :user => for_player.to_hash, 
-        :opponent => (self.opponent_of(for_player) || {}).to_hash,
+        :opponent => (self.opponent_of(for_player) || {}).to_hash.merge(:color => self.color_of(self.opponent_of(for_player))),
         :color => self.color_of(for_player)
       }.to_json
     else

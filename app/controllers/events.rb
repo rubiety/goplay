@@ -28,6 +28,7 @@
 class Events < Application
   provides :xml, :yaml, :js
   
+  before :login_required
   before :fetch_unconsumed_events, :only => [:index]
   
   # GET /users/current/events
