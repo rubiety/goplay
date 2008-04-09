@@ -33,7 +33,9 @@ class Events < Application
   # GET /users/current/events
   def index
     @events.each {|e| e.consumed_at = Time.now; e.save }
-    @user.pinged!
+    current_user.pinged!
+    
+    User.sweep_stale_users!
     
     display @events
   end

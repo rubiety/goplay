@@ -40,7 +40,7 @@ class Board
   # Constructs the grid using move and capture information
   def reconstruct_grid_from_moves
     @game.moves.each do |move|
-      grid[move.row][move.column] = game.color(move.user)
+      grid[move.row][move.column] = game.color_of(move.user)
       
       move.captures.each do |capture|
         grid[capture.row][capture.column] = nil

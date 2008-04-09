@@ -88,23 +88,59 @@ class Game < DataMapper::Base
     self.status = 'Complete'
   end
   
+  # Game was cancelled by a user leaving/forfeiting
+  def cancel!
+    self.status = 'Complete'
+    self.completed_status = 'Cancelled'
+  end
+  
   # Determines the opponent given a "current_user"
-  def opponent(current_user)
+  def opponent_of(current_user)
     return black_player if white_player == current_user
     return white_player if black_player == current_user
     nil
   end
   
   # Determines the color of the passed "current_user"
-  def color(current_user)
+  def color_of(current_user)
     return :white if white_player == current_user
     return :black if black_player == current_user
     nil
   end
   
+  # Determins the player of a particular color
+  def player_of_color(color)
+    return white_player if color.to_sym == :white
+    return black_player if color.to_sym == :black
+    nil
+  end
+  
   # Makes a move on the board - effectively delegates to board
   def make_move(current_user, row, column)
-    board.make_move(color(current_user), row, column)
+    board.make_move(color_of(current_user), row, column)
+  end
+  
+  # Provides JSON representation of game
+  def to_json(for_player = nil)
+    if for_player
+      {
+        :game => self.to_hash, 
+        :user => for_player.to_hash, 
+        :opponent => (self.opponent_of(for_player) || {}).to_hash,
+        :color => self.color_of(for_player)
+      }.to_json
+    else
+      self.to_hash.to_json
+    end
+  end
+  
+  def to_hash
+    {
+      :white_player_id => white_player_id,
+      :black_player_id => black_player_id,
+      :board_size => board_size,
+      :grid => board.grid
+    }
   end
   
   private

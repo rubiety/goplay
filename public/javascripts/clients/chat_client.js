@@ -25,6 +25,7 @@ var ChatClient = function(chatbox, listener, options) {
   options = options || {};
   this.chatbox = chatbox;
   this.listener = listener;
+  this.game_id = options.game_id;
   this.initialize();
 };
 
@@ -40,6 +41,10 @@ ChatClient.prototype = {
   
   onMessage: function(event) {
     data = event.payload;
+    
+    // Don't process messages not intended for us
+    if (event.game_id != this.game_id) { return; }
+    
     $('<div class="message"><span>' + data.sender.name + ':</span> ' + data.message + '</div>').appendTo('#' + this.chatbox);
     $('#' + this.chatbox).scrollTo('div:last');
   }

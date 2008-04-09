@@ -2,29 +2,15 @@
 $(document).ready(function() {
   events = new RemoteEventsListener('/users/current/events');
   
-  chatClient = new ChatClient('messageslist', events);
-  
-  goClient = new GoClient('gameboard', events, {
-    user: {
-      id: <%= current_user.id %>,
-      name: "<%= current_user.name %>",
-      description: "<%= current_user.description %>"
-    },
-    game: {
-      id: <%= @game.id %>,
-      size: <%= @game.board_size %>,
-      color: "<%= @game.white_player == current_user ? 'white' : 'black' %>",
-      opponent: {
-        id: <%= @opponent.id %>,
-        name: "<%= @opponent.name %>",
-        description: "<%= @opponent.description %>",
-        color: "<%= @game.white_player == @opponent ? 'white' : 'black' %>"
-      }
-    }
-  });
+  chatClient = new ChatClient('messageslist', events, { game_id: <%= @game.id %> });
+  goClient = new GoClient('gameboard', events, { board_id: 'gameboard', game_id: <%= @game.id %>});
   
   $('#send_message_form').ajaxForm(function() {
     $(this).clearForm();
+  });
+  
+  $('#gameboard #controls #show_help a').click(function() {
+    $('#gameboard #controls #help').slideToggle('slow');
   });
   
 });
@@ -60,6 +46,20 @@ $(document).ready(function() {
       <span id="turn"></span>
       <span id="captures"></span>
       <span id="errors"></span>
+      
+      <span id="show_help">&raquo; <a href="#">Show Help</a></span>
+      <div id="help" style="display: none">
+        <ul>
+          <li><strong>Making a Move:</strong> 
+            To make a move when it is your turn, simply click on the game board where 
+            you would like to place a piece.  
+          </li>
+          <li><strong>Game End:</strong>
+            A game in Go does not end automatically but rather occurs when both players have issued 
+            "pass" in succession.  At that point the total score is calculated automatically.
+          </li>
+        </ul>
+      </div>
     </div>
     <div id="svgboard">
     </div>
@@ -74,7 +74,7 @@ $(document).ready(function() {
     <div id="messageslist">
     </div>
     <div id="sendmessage">
-      <% form_for :message, :action => url(:messages), :id => 'send_message_form' do %>
+      <% form_for :message, :action => url(:game_messages, :game_id => @game.id), :id => 'send_message_form' do %>
         <fieldset>
           <p><%= text_control :message, :style => 'width: 99%' %></p>
           <p><%= submit_field :value => 'Send Message' %></p>

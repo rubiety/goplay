@@ -34,8 +34,10 @@ class Messages < Application
   # POST /game/1/messages
   # POST /messages
   def create
+    fetch_game
     @message = Message.new(params[:message])
     @message.user = current_user
+    @message.game = @game if @game
     
     if @message.save
       redirect url(:users)

@@ -18,14 +18,15 @@ body {
 	font-size: 100.01%;
 	background: #660000;
 	padding: 0;
+	padding-top: 10px;
 	margin: 0;
 }
 
 #wrapper {
 	font-size: 0.8em;
 	line-height: 1.4em;
-	width: 80%;
-	margin: 10px auto 5px auto;
+	width: 850px;
+	margin: 0px auto 0px auto;
 	padding: 10px;
 	background: #990000;
 }
@@ -44,10 +45,11 @@ body {
 	font-size: 0.8em;
 	font-weight: normal;
 	line-height: 1.4em;
-	width: 80%;
-	margin: 2px auto 10px auto;
+	width: 850px;
+	margin: 2px auto 0px auto;
 	padding-left: 10px;
 	padding-right: 10px;
+	padding-bottom: 10px;
 	color: #995F5A;
 }
 #footer a:link { color: #995F5A; text-decoration: underline; }
@@ -162,21 +164,18 @@ code {
 }
 
 ul, ol {
-	margin-bottom:1.5em;
-	padding-left:0;
+	margin-bottom: 1.5em;
+	padding-left: 0;
 }
 
 ul {
-	list-style-type:none;
-	margin-left:0;
+	list-style-type: none;
+	margin-left: 0;
 }	
 
 ul li {
 	padding-left: 1em;
 	margin-bottom: 0.6em;
-	background-image: url(../images/icons/bullets/gt.gif);
-	background-position-x: 0.5em;
-	background-position: left;
 	background-repeat: no-repeat;
 	vertical-align: top;
 }
@@ -199,29 +198,38 @@ ol li {
 
 /*** Specific Page Styles ***/
 
-#letterhead {
+#header {
 	padding-left: 95px;
 	margin-bottom: 1em;
-	background-image: url(../images/letterhead_logo.gif);
+	background-image: url(../images/logo.gif);
 	background-position: left;
 	background-repeat: no-repeat;
-	min-height: 75px;
+	min-height: 50px;
 }
 
-#letterhead h3 {
+#header h3 {
 	font-size: 1.6em;
 	font-weight: bold;
 }
 
-#letterhead p {
+#header p {
 	font-size: 1.1em;
 	font-weight: bold;
-	margin-bottom: 0.5em;
+	margin-bottom: 0.2em;
 	color: #333333;
 }
 
 #loggedin {
+  width: 200px;
   float: right;
+  font-size: 0.8em;
+  font-weight: normal;
+  color: #000000;
+}
+
+#loggedin img {
+  float: left;
+  padding-right: 10px;
 }
 
 .leftcolumn {
@@ -341,6 +349,7 @@ ol li {
 
 #userslist .user {
   clear: left;
+  padding-bottom: 5px;
 }
 
 #userslist .user img {
@@ -395,7 +404,8 @@ ol li {
 
 #chatbox #messageslist {
   height: 300px;
-  background-color: #EDFBAF;
+  -background-color: #EDFBAF;
+  background-color: #F5D6D8;
   border: 1px solid #666666;
   padding: 8px;
   overflow: auto;
@@ -431,14 +441,14 @@ ol li {
 #gameboard #controls {
   margin-bottom: 10px;
   background-color: #DDDDDD;
-  height: 60px;
   border: 1px solid #333333;
   padding: 5px;
 }
 
-#gameboard #controls #turn {
+#gameboard #controls #status {
   display: block;
   font-weight: bold;
+  font-size: 1.1em;
   color: #990000;
 }
 

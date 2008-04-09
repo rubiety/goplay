@@ -71,12 +71,23 @@ class User < DataMapper::Base
     self.login
   end
   
+  # Hash Representation
+  def to_hash
+    {
+      :id => self.id,
+      :name => self.name,
+      :description => self.description
+    }
+  end
+  
   # Makes the user active and broadcasts a user entered event
   def enter!
+    self.last_login_at = Time.now
+    self.last_pinged_at = Time.now
     self.active = true
     self.save
     
-    UserEnteredEvent.new(self).enqueue_for_all_active_users
+    UserEnteredEvent.new(self).enqueue_for_all_active_users(:except => self.id)
     self
   end
   
@@ -85,7 +96,11 @@ class User < DataMapper::Base
     self.active = false
     self.save
     
-    UserLeftEvent.new(self, 'Logout').enqueue_for_all_active_users
+    UserLeftEvent.new(self, 'Logout').enqueue_for_all_active_users(:except => self.id)
+    
+    # TODO: End active games that the user was participating in...
+    
+    
     self
   end
   
@@ -103,6 +118,13 @@ class User < DataMapper::Base
     self.last_pinged_at = Time.now
     self.save
     self
+  end
+  
+  # Force-leaves users who have not pinged in 30 seconds
+  def self.sweep_stale_users!
+    self.each(:active => true, :last_pinged_at.lt => Time.now - 30.seconds) do |stale_user|
+      stale_user.leave!
+    end
   end
 end
 

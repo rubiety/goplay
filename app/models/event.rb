@@ -43,9 +43,31 @@ class Event < DataMapper::Base
   end
   
   # Same as enqueue but spawns events for all active users
+  # Optionally accepts the following options:
+  # * +:except+ - Array if user IDs to exclude.
+  # * +:only+ - Array of user IDs to restrict to.
+  # 
   def enqueue_for_all_active_users(options = {})
     events = []
-    User.all(:active => true).each do |user|
+    
+    if options[:except]
+      options[:except] ||= []
+      options[:except] = [options[:except]] unless options[:except].is_a?(Array)
+      
+      users = User.all(:active => true, :id.not => options[:except])
+    
+    elsif options[:only]
+      options[:only] ||= []
+      options[:only] = [options[:only]] unless options[:only].is_a?(Array)
+      
+      users = User.all(:active => true, :id => options[:only])
+    
+    else
+      users = User.all(:active => true)
+      
+    end
+    
+    users.each do |user|
       event = self.dup
       event.user_id = user.id
       event.save

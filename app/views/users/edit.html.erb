@@ -2,12 +2,12 @@
 <script src="/javascripts/livevalidation.js" type="text/javascript"></script>
 <script language="JavaScript">
 $(document).ready(function() {
+  new PingClient('/users/current/ping');
+  
   new LiveValidation('user_first_name').add(Validate.Presence);
   new LiveValidation('user_last_name').add(Validate.Presence);
   new LiveValidation('user_login').add(Validate.Length, { minimum: 3, maximum: 40 });
   new LiveValidation('user_email').add(Validate.Email);
-  new LiveValidation('user_password').add(Validate.Presence);
-  new LiveValidation('user_password_confirmation').add(Validate.Confirmation, { match: 'user_password' });
 })
 </script>
 <% end %>

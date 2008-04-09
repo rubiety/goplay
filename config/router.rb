@@ -23,12 +23,12 @@ Merb.logger.info("Compiling routes...")
 Merb::Router.prepare do |r|
   
   r.resources :sessions
-  r.resources :users do |users|
+  r.resources :users, :member => {:ping => :post} do |users|
     users.resources :events
   end
   
   r.resources :messages
-  r.resources(:games, :member => {:accept => :get, :reject => :get}) do |games|
+  r.resources(:games, :member => {:accept => :get, :reject => :get, :leave => :post}) do |games|
     games.resources :messages
     games.resources :moves
   end

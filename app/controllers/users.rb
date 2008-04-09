@@ -20,6 +20,10 @@ class Users < Application
   # GET /users
   def index
     @message = Message.new
+    
+    # Prepopulate message list with all messages since login
+    @messages = Message.all(:conditions => {:game_id => nil, :created_at.gt => current_user.last_login_at})
+    
     display @users
   end
   
@@ -71,7 +75,7 @@ class Users < Application
   private
   
   def fetch_active_users
-    @users = User.all(:active => true, :suspended_at => nil)
+    @users = User.all(:active => true, :suspended_at => nil, :id.not => current_user.id)
   end
   
   def fetch_user

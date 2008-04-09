@@ -18,6 +18,7 @@
 <%= js_include_tag 'application' %>
 
 <%= js_include_tag 'clients/remote_events_listener' %>
+<%= js_include_tag 'clients/ping_client' %>
 <%= js_include_tag 'clients/user_list_client' %>
 <%= js_include_tag 'clients/chat_client' %>
 <%= js_include_tag 'clients/game_invites_client' %>
@@ -36,21 +37,24 @@
 
 <div id="contentframe">
 
-<div id="letterhead">
+<div id="header">
   
   <% if logged_in? %>
   <div id="loggedin">
+    <img src="/images/avatars/bhughes.jpg" />
     <p>Welcome, <%= current_user.name %></p>
-    <p><a href="/users/current/edit">Profile</a> | <a href="/logout">Logout</a></p>
+    <p><a href="/">Home</a> | <a href="/users/current/edit">Profile</a> | <a href="/logout">Logout</a></p>
+  </div>
+  <% else %>
+  <div id="loggedin">
+    <p>Not Logged In</p>
+    <p><a href="/">Home</a> | <a href="/about">About GoPlay!</a></p>
   </div>
   <% end %>
   
   <h3>Go Play!</h3>
   <p>
     An online Go experience...
-  </p>
-  <p>
-    <a href="/">Home</a>
   </p>
 </div>
 

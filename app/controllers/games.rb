@@ -18,9 +18,18 @@ class Games < Application
   # GET /games/1
   def show
     @message = Message.new
-    @opponent = @game.opponent(current_user)
-    content_type :html
-    render_compound_document
+    @opponent = @game.opponent_of(current_user)
+    
+    case content_type
+    when :xml
+      @game.to_xml
+    when :js
+      @game.to_json(current_user)
+    when :yaml
+      @game.to_yaml
+    else
+      render_compound_document
+    end
   end
   
   # GET /games/new
@@ -52,6 +61,13 @@ class Games < Application
   # POST /games/1/reject
   def reject
     @game.reject! if @game.black_player == current_user
+    redirect url(:users)
+  end
+  
+  # POST /games/1/leave
+  def leave
+    @game.cancel!
+    GameEndEvent.new(@game, @game.opponent_of(current_user)).enqueue
     redirect url(:users)
   end
   

@@ -23,7 +23,11 @@ class Message < DataMapper::Base
   
   def spawn_event
     event = MessageEvent.new(self)
-    self.game ? event.enqueue : event.enqueue_for_all_active_users
+    if self.game
+      event.enqueue_for_all_active_users(:only => [self.game.white_player.id, self.game.black_player.id])
+    else
+      event.enqueue_for_all_active_users
+    end
     true
   end
 end

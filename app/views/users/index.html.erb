@@ -38,6 +38,11 @@ $(document).ready(function() {
   <h1>Chat</h1>
   <div id="chatbox">
     <div id="messageslist">
+      
+      <% @messages.each do |message| %>
+        <div class="message"><span><%= message.user.name %>:</span> <%= h message.message %></div>
+      <% end %>
+      
     </div>
     <div id="sendmessage">
       <% form_for :message, :action => url(:messages), :id => 'send_message_form' do %>

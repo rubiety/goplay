@@ -31,39 +31,16 @@
  * ----------------------------------------
  * 
  * events = new RemoteEventsListener('/users/current/events');
- * new GoClient('gameboard', events', {
- *   user: {
- *     id: 1,
- *     name: 'Ben Hughes',
- *     description: 'Developer of this application...'
- *   },
- *   game: {
- *     id: 3,
- *     size: 19,
- *     color: 'white',
- *     opponent: {
- *       id: 2,
- *       name: 'John Doe',
- *       description: 'Sample user of this application...',
- *       color: 'black'
- *     }
- *   }
- * });
- * 
- * NOTE: In the future much of the above data may be 
- * retrieved dynamically via Ajax rather than being specified
- * in-line.
+ * new GoClient('gameboard', events', { game_id: 1 });
  * 
  **********************************************************/
 
 var GoClient = function(gamebox, listener, options) {
   options = options || {};
+  this.game_id = options.game_id;
+  this.board_id = options.board_id;
   this.board = { id: gamebox };
   this.listener = listener;
-  this.user = options.user;
-  this.game = options.game;
-  
-  this.board.size = this.game.size;
   
   this.initialize();
 };
@@ -82,23 +59,39 @@ GoClient.PIECE_RADIUS_DIVISOR = 2.4;
 GoClient.prototype = {
   
   initialize: function() {
-    this.retrieveGameInformation();
-    this.createGameBoard();
-    this.registerEventListeners();
+    thisobj = this;
     
-    // Initialize Turn
-    this.myTurn = (this.game.color == 'white') ? true : false;
-    this.updateTurn();
-    this.captures = 0;
+    $.getJSON(this.gameUrl(), function(info) {
+      thisobj.game = info.game;
+      thisobj.user = info.user;
+      thisobj.opponent = info.opponent;
+      
+      thisobj.createGameBoard();
+      thisobj.registerEventListeners();
+      
+      thisobj.active = true;
+      thisobj.myTurn = (this.color == 'white') ? true : false;
+      thisobj.updateTurn();
+      thisobj.captures = 0;
+    });
   },
   
-  // TODO: Retrieve game information by Ajax instead of in-line object notation
-  retrieveGameInformation: function() {
+  gameUrl: function() {
+    return '/games/' + this.game_id;
+  },
+  
+  registerEventListeners: function() {
+    this.listener.on('GameInviteResponseEvent', this.onGameInviteResponse, this);
+    this.listener.on('MoveEvent', this.onMove, this);
+    this.listener.on('GameEndEvent', this.onGameEnd, this);
     
+    $(window).bind('unload', this.game_id, this.onUnload);
   },
   
   createGameBoard: function() {
-    if (!this.game || !this.board || !this.board.id || this.svgboard) { return; }
+    if (!this.game || !this.board_id || this.svgboard) { return false; }
+    
+    this.board = {};
     
     if (!this.board.width) { this.board.width = GoClient.BOARD_WIDTH; }
     if (!this.board.height) { this.board.height = GoClient.BOARD_HEIGHT; }
@@ -106,16 +99,16 @@ GoClient.prototype = {
     if (!this.board.left) { this.board.left = GoClient.BOARD_LEFT; }
     
     // Default rows and columns to size, could support non-square in future
-    this.board.rows = this.board.size;
-    this.board.columns = this.board.size;
+    this.board.rows = this.game.board_size;
+    this.board.columns = this.game.board_size;
     
     this.board.rowSize = this.board.height / (this.board.rows - 1);
     this.board.columnSize = this.board.width / (this.board.columns - 1);
     
     if (!this.board.pieceRadius) { this.board.pieceRadius = this.board.rowSize / GoClient.PIECE_RADIUS_DIVISOR; }
     
-    $('#' + this.board.id + ' #svgboard').svg();
-    this.svgboard = svgManager.getSVGFor('#' + this.board.id + ' #svgboard');
+    $('#' + this.board_id + ' #svgboard').svg();
+    this.svgboard = svgManager.getSVGFor('#' + this.board_id + ' #svgboard');
     
     // Construct Row & Column Lines
     for (i = 0; i < this.board.rows; i++) {
@@ -127,7 +120,7 @@ GoClient.prototype = {
     }
     
     // Initialize Click Listener
-    $('#' + this.board.id + ' #svgboard').bind('click', this, this.onBoardClick);
+    $('#' + this.board_id + ' #svgboard').bind('click', this, this.onBoardClick);
   },
   
   // TODO: Refactor
@@ -138,12 +131,6 @@ GoClient.prototype = {
   // TODO: Refactor
   removePiece: function(row, column) {
     
-  },
-  
-  registerEventListeners: function() {
-    this.listener.on('GameInviteResponseEvent', this.onGameInviteResponse, this);
-    this.listener.on('MoveEvent', this.onMove, this);
-    this.listener.on('GameEndEvent', this.onGameEnd, this);
   },
   
   onGameInviteResponse: function(event) {
@@ -172,29 +159,34 @@ GoClient.prototype = {
   
   onGameEnd: function(event) {
     data = event.payload;
-    $('<h3>Game Ended...</h3>').appendTo('#gameboard');
+    
+    $('#' + this.board_id + ' #controls #status').text("Game Ended: " + data.completed_status);
+    this.active = false;
   },
   
   startGame: function(event) {
-    $('<h2>Player Accepted! Starting Game...</h2>').appendTo('#gameboard');
-    
     this.createGameBoard();
+    this.active = true;
   },
   
   onBoardClick: function(event) {
     thisobj = event.data;
     
-    if (!thisobj.myTurn) { return; }
+    // Only allow click if game is active and it is my turn
+    if (!thisobj.active || !thisobj.myTurn) { return; }
     
+    // Find the column and row clicked
     var x = event.pageX - this.offsetLeft;
   	var y = event.pageY - this.offsetTop;
-  	
   	row = Math.round((y - thisobj.board.top) / thisobj.board.rowSize);
   	column = Math.round((x - thisobj.board.left) / thisobj.board.columnSize);
   	
+  	// Return if row or column is out of bounds
+  	if (row >= this.game.rowSize || column >= this.game.columnSize) { return; }
+  	
   	thisobj.createPiece(row, column, thisobj.game.color);
   	
-  	$.post('/games/' + thisobj.game.id + '/moves', { row: row, column: column }, function(data) {
+  	$.post('/games/' + thisobj.game_id + '/moves', { row: row, column: column }, function(data) {
   	  
   	  if (data.errors.length == 0) {
   	    thisobj.toggleTurn();
@@ -205,8 +197,10 @@ GoClient.prototype = {
     	    thisobj.pieceCaptured(capture.row, capture.column)
     	  }
     	  
+    	  thisobj.flash();
+    	  
     	} else {
-    	  thisobj.showErrors(data.errors);
+    	  thisobj.flash(data.errors);
     	}
     	
   	}, 'json');
@@ -216,15 +210,15 @@ GoClient.prototype = {
     thisobj.removePiece(row, column);
     this.captures++;
     
-    $('#' + this.board.id + ' #controls #captures').text('Captures: ' + this.captures);
+    $('#' + this.board_id + ' #controls #captures').text('Captures: ' + this.captures);
   },
   
   // TODO: Refactor into something better...
-  showErrors: function(errors) {
+  flash: function(errors) {
     if (!errors || errors.length == 0) {
-      $('#' + this.board.id + ' #controls #errors').text('');
+      $('#' + this.board_id + ' #controls #errors').text('');
     } else {
-      $('#' + this.board.id + ' #controls #errors').text(errors[0]);
+      $('#' + this.board_id + ' #controls #errors').text(errors[0]);
     }
   },
   
@@ -234,9 +228,21 @@ GoClient.prototype = {
   
   updateTurn: function() {
     if (this.myTurn) {
-      $('#' + this.board.id + ' #controls #turn').text("Your Turn!");
+      $('#' + this.board_id + ' #controls #status').text("Your Turn!");
     } else {
-      $('#' + this.board.id + ' #controls #turn').text("Opponent's Turn");
+      $('#' + this.board_id + ' #controls #status').text("Opponent's Turn");
+    }
+  },
+  
+  onUnload: function(event) {
+    
+    if (confirm('You are about to leave this game.  This will cause you to forfeit to your opponent.  Are you sure you want to do this?')) {
+      $.post('/games/' + event.data + '/leave', {});
+      return true;
+    } else {
+      event.stopPropagation();
+      event.preventDefault();
+      return false;
     }
   }
   
