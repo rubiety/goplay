@@ -1,15 +1,20 @@
 Basic TODO
 ===========================
+* Read Up on Merb & Deployments
 * Avatar Uploading
+* Capistrano deployment to goplay.rubiety.com
+* RDoc Rake Task
 * Better Invite Management System (Support in-game requests and multiple windows)
 * Detect Obvious Invalid move and error system
+* Implement Basic Capturing Checking
+* Implement User Leave Game End Notification
+* Read Up on Go & Go Programming
+
 * Implement controls bar with (pass) button
-* Tooltips when clicking on already-moved pieces
 * Safari connection lockout issues?
-* Highlight or fade in new moves
-* Capistrano deployment to goplay.rubiety.com
-* OpenID Authentication
-* RDoc Rake Task
+* RSpec Test Suite
+* JavaScript Behavior Testing Test Suite
+
 
 New Major Features
 ===========================
