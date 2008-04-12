@@ -1,5 +1,5 @@
 module Merb
-  module MofsHelper
+  module MovesHelper
     
   end
 end

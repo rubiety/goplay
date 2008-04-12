@@ -3,7 +3,6 @@ Basic TODO
 * Read Up on Merb & Deployments
 * Avatar Uploading
 * Capistrano deployment to goplay.rubiety.com
-* RDoc Rake Task
 * Better Invite Management System (Support in-game requests and multiple windows)
 * Detect Obvious Invalid move and error system
 * Implement Basic Capturing Checking

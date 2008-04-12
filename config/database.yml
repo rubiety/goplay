@@ -7,8 +7,9 @@
 
 :test:
   <<: *defaults
-  :database: sample_test
+  :database: goplay_test
 
 :production:
   <<: *defaults
-  :database: sample_production
+  :database: goplay
+  :password: gp0102$
