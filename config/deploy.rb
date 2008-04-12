@@ -33,7 +33,7 @@ namespace :deploy do
 	end
 	
 	task :start_merb do
-		run "merb -c 1 -L log/merb.log"
+		run "merb -e production -c 1 -L log/merb.log"
 	end
 	
 	task :stop_merb do
