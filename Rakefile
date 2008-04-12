@@ -19,6 +19,9 @@ Merb.load_dependencies(:environment => init_env)
 # Get Merb plugins and dependencies
 Merb::Plugins.rakefiles.each { |r| require r } 
 
+# Load any custom rakefile extensions
+Dir["#{Merb.root}/lib/tasks/**/*.rake"].sort.each { |ext| load ext }
+
 desc "start runner environment"
 task :merb_env do
   Merb.start_environment(:environment => init_env, :adapter => 'runner')
@@ -124,3 +127,5 @@ namespace :freeze do
     end
   end
 end
+
+

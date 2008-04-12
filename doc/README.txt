@@ -1,3 +1,11 @@
+= Introduction
+
+GoPlay! is an Ajax-heavy web application facilitating players coming together to play games of Go (a board game). 
+
+GoPlay! was created using the Merb Ruby Framework, DataMapper Object-Relational Mapper, and jQuery JavaScript library and is fully tested using RSpec behavior testing framework.
+
+= Features
+
 * A given player can engage in multiple games at the same time (in different tabs/windows) each with a different
   URL such as /games/23-bhughes-vs-dleveille. 
 
@@ -18,20 +26,20 @@
   an interactive Ruby console as a result of the abstracted and well-factored nature of the object model; 
   example administrative actions:
   
-  # Suspend user with note:
-  ruby> User.with_login_of('bhughes').suspend! 'You are using too much bandwidth.'
+    # Suspend user with note:
+    ruby> User.with_login_of('bhughes').suspend! 'You are using too much bandwidth.'
   
-  # Send message as user:
-  ruby> User.with_login_of('bhughes').messages.create :message => 'My Global Notice'
+    # Send message as user:
+    ruby> User.with_login_of('bhughes').messages.create :message => 'My Global Notice'
   
-  # Force End Game 23:
-  ruby> Game[23].complete!
+    # Force End Game 23:
+    ruby> Game[23].complete!
   
-  # Change User's Description:
-  ruby> User.with_login_of('jdoe').update_attributes :description => 'New Description'
+    # Change User's Description:
+    ruby> User.with_login_of('jdoe').update_attributes :description => 'New Description'
   
-  # Force User Logout:
-  ruby> User.with_login_of('jdoe').leave!
+    # Force User Logout:
+    ruby> User.with_login_of('jdoe').leave!
   
 * Strong tracking of user activity with request polling and separate "ping" client posts that keep the client 
   alive even when event polling need not occur (such as when editing your profile).  Makes every effort to 
@@ -39,5 +47,3 @@
   inference from the client pings and event polling timestamps.
 
 
-  
-  
