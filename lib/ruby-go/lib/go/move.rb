@@ -37,9 +37,16 @@ module Go
     # 1. If there are any adjacent opponent strings without liberties, remove them and increase the prisoner count.
     # 2. If the newly placed stone is part of a string without liberties, remove it and increase the prisoner count.
     def compute_move_captures(color, row, column)
-      []
+      captures = []
+      other_color = (color == :white ? :black : :white)
+      neighbor_row, neighbor_column = grid.north_of(row, column)
+      
+      if grid.get(neighbor_row, neighbor_column) == other_color
+        captures << [neighbor_row, neighbor_column]
+        grid.set(neighbor_row, neighbor_column, nil)
+      end
+      captures
     end
-    
     
     # Detects a "Rule of Ko" situation, which is not allowed
     def rule_of_ko_move?(color, row, column)

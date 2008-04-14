@@ -139,11 +139,11 @@ GoClient.prototype = {
   },
   
   createPiece: function(row, column, color) {
-    this.svgboard.circle(null, this.board.left + this.board.columnSize * column, this.board.top + this.board.rowSize * row, this.board.pieceRadius, {fill: color, stroke: 'black', stroke_width: 2});
+    this.svgboard.circle(null, this.board.left + this.board.columnSize * column, this.board.top + this.board.rowSize * row, this.board.pieceRadius, {id: 'stone_' + row + '_' + column, fill: color, stroke: 'black', stroke_width: 2});
   },
   
   removePiece: function(row, column) {
-    
+    $('#' + this.board_id + ' #svgboard #stone_' + row + '_' + column).remove();
   },
   
   onGameInviteResponse: function(event) {

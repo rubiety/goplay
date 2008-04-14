@@ -30,7 +30,7 @@ class Moves < Application
     begin
       @move.save
       
-      @move.captures do |capture|
+      @move.captures.each do |capture|
         move_captures << {:row => capture.row, :column => capture.column}
       end
       
