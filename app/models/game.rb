@@ -157,10 +157,13 @@ class Game < DataMapper::Base
   end
   
   def encode_board_state
-    self.board_state = YAML::dump(board.grid)
+    self.board_state = YAML::dump(:grid => board.grid, :strings => board.strings)
   end
   
   def decode_board_state
-    board.grid = YAML::load(board_state) if board_state
+    return true unless board_state
+    decoded = YAML::load(board_state)
+    board.grid = decoded[:grid]
+    board.strings = decoded[:strings]
   end
 end

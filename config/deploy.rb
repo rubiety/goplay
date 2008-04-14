@@ -33,11 +33,11 @@ namespace :deploy do
 	end
 	
 	task :start_merb do
-		run "merb -e production -c 1 -L log/merb.log"
+		run "cd #{release_path}; merb -e production -c 1 -L log/merb.log"
 	end
 	
 	task :stop_merb do
-		run "merb -K all"
+		run "cd #{release_path}; merb -K all"
 	end
 	
 end
