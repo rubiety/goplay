@@ -300,41 +300,41 @@ ol li {
   
 .flash ul li {  
     margin-bottom: 0.6em;  
-    padding-left: 1em;  
+    padding-left: 0.6em;  
     vertical-align: top;  
 }
 
 .flash .container {  
-    padding: 1em;  
-    padding-left: 5em;  
+    padding: 1em; 
+    padding-left: 3.5em;  
     margin-bottom: 1.5em;  
 }
 
 .flash .error {
-    background: #fcf6d0 url(../images/icons/flashes/error.gif) 1.5em 1em no-repeat;  
+    background: #fcf6d0 url(../images/icons/flashes/error.gif) 0.8em 1em no-repeat;  
     border-top: 1px solid #ecd757;  
     border-bottom: 1px solid #ecd757;  
 }  
 .flash .back {  
-    background: #e9f3dc url(../images/icons/flashes/back.gif) 1.5em 1em no-repeat;  
+    background: #e9f3dc url(../images/icons/flashes/back.gif) 0.8em 1em no-repeat;  
     border-top: 1px solid #bfcbb0;  
     border-bottom: 1px solid #bfcbb0;  
 }  
   
 .flash .confirm {  
-    background: #e9f3dc url(../images/icons/flashes/confirm.gif) 1.5em 1em no-repeat;  
+    background: #e9f3dc url(../images/icons/flashes/confirm.gif) 0.8em 1em no-repeat;  
     border-top: 1px solid #bfcbb0;  
     border-bottom: 1px solid #bfcbb0;  
 }  
   
 .flash .info {  
-    background: #dee9f4 url(../images/icons/flashes/info.gif) 1.5em 1em no-repeat;  
+    background: #dee9f4 url(../images/icons/flashes/info.gif) 0.8em 1em no-repeat;  
     border-top: 1px solid #b4c5d5;  
     border-bottom: 1px solid #b4c5d5;  
 }  
   
 .flash .warn {  
-    background: #fcf6d0 url(../images/icons/flashes/warn.gif) 1.5em 1em no-repeat;  
+    background: #fcf6d0 url(../images/icons/flashes/warn.gif) 0.8em 1em no-repeat;  
     border-top: 1px solid #ecd757;  
     border-bottom: 1px solid #ecd757;  
 }
@@ -477,6 +477,12 @@ ol li {
 }
 
 #gameboard #controls #captures {
+  display: block;
+  font-weight: bold;
+  color: #990000;
+}
+
+#gameboard #controls #opponent_captures {
   display: block;
   font-weight: bold;
   color: #990000;

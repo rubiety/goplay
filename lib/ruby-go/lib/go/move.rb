@@ -46,8 +46,6 @@ module Go
         grid.set(neighbor_row, neighbor_column, nil)
       end
       captures
-      
-      []
     end
     
     # Detects a "Rule of Ko" situation, which is not allowed
