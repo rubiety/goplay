@@ -28,7 +28,7 @@ Merb::Router.prepare do |r|
   end
   
   r.resources :messages
-  r.resources(:games, :member => {:accept => :get, :reject => :get, :leave => :post}) do |games|
+  r.resources(:games, :member => {:accept => :post, :reject => :post, :leave => :post}) do |games|
     games.resources :messages
     games.resources :moves
   end

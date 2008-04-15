@@ -15,6 +15,17 @@ $(document).ready(function() {
 
 <div class="leftcolumn">
   <div id="inviteslist">
+    <% @invites.each do |invite| %>
+    <div class="invite" id="invites_list_entry_<%= invite.id %>"> 
+      <img src="<%= invite.white_player.gravatar_url %>" />
+      <h4>New Game Invitation</h4>
+      <span><%= invite.white_player.name %></span>
+      <%= h invite.white_player.description %>
+      <br />
+      <a class="acceptlink" id="accept_game_<%= invite.id %>" href="#">Accept Invite</a> | <a class="rejectlink" id="reject_game_<%= invite.id %>" href="#">Reject Invite</a>
+      <br style="clear: both" />
+    </div>
+    <% end %>
   </div>
   
   <h1>Active Users</h1>

@@ -6,8 +6,7 @@ $(document).ready(function() {
   goClient = new GoClient('gameboard', events, { 
     board_id: 'gameboard', 
     game_id: <%= @game.id %>,
-    color: '<%= @game.color_of(current_user).to_s %>', 
-    myTurn: <%= @game.players_turn?(current_user) ? 'true' : 'false' %>
+    color: '<%= @game.color_of(current_user).to_s %>'
   });
   
   $('#send_message_form').ajaxForm(function() {
@@ -28,9 +27,9 @@ $(document).ready(function() {
   
   <div id="inviteslist">
     
-    <% if @game.status == 'Created' %>
+    <% if @game.status == 'Created' && @game.white_player == current_user %>
     <div id="invitee" class="invite">
-      <img src="/images/avatars/bhughes.jpg" />
+      <img src="<%= @opponent.gravatar_url %>" />
       <h4>Awaiting Invite Response From:</h4>
       <span><%= h @opponent.name %></span>
       <%= h @opponent.description %>
@@ -41,7 +40,7 @@ $(document).ready(function() {
     <div id="rejectedinvite" class="invite" style="display: none">
       <h4>Invite Rejected</h4>
       <span>Sorry, but your invite was rejected.</span>
-      <%= link_to 'Back to Home', url(:users) %>
+      <%= link_to_function 'Close Game Window', 'window.close();' %>
     </div>
     
   </div>

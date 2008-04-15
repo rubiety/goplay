@@ -34,10 +34,16 @@ GameInvitesClient.prototype = {
   
   initialize: function() {
     this.registerEventListeners();
+    this.rebindAcceptAndReject();
   },
   
   registerEventListeners: function() {
     this.listener.on('GameInviteEvent', this.onGameInvite, this);
+  },
+  
+  rebindAcceptAndReject: function() {
+    $('#' + this.invitesbox + ' .acceptlink').bind('click', this, this.onAcceptInvite);
+    $('#' + this.invitesbox + ' .rejectlink').bind('click', this, this.onRejectInvite);
   },
   
   onGameInvite: function(event) {
@@ -45,17 +51,38 @@ GameInvitesClient.prototype = {
     
     $('#' + this.invitesbox).append($(
       '<div class="invite" style="display: none" id="invites_list_entry_' + data.source_user.id + '">' + 
-      '  <img src="/images/avatars/bhughes.jpg" />' +
+      '  <img src="' + data.source_user.gravatar_url + '" />' +
       '  <h4>New Game Invitation</h4>' +
       '  <span>' + data.source_user.name + '</span>' +
       '  ' + data.source_user.description +
       '  ' + '<br />' + 
-      '  <a href="/games/' + data.game.id + '/accept">Accept Invite</a> | <a href="/games/' + data.game.id + '/reject">Reject Invite</a>' + 
+      '  <a class="acceptlink" id="accept_game_' + data.game.id + '" href="#">Accept Invite</a> | <a class="rejectlink" id="reject_game_' + data.game.id + '" href="#">Reject Invite</a>' + 
       '  <br style="clear: both" />' + 
       '</div>'
     ));
     
-    $('#' + this.invitesbox + ' #invites_list_entry_' + data.source_user.id).fadeIn();
+    $('#' + this.invitesbox + ' #invites_list_entry_' + data.game.id).fadeIn();
+    
+    this.rebindAcceptAndReject();
+  },
+  
+  onAcceptInvite: function(e) {
+    thisobj = e.data;
+    game_id = this.id.replace('accept_game_', '');
+    $.post('/games/' + game_id + '/accept');
+    
+    $('#' + thisobj.invitesbox + ' #invites_list_entry_' + game_id).fadeOut();
+    $('#' + thisobj.invitesbox + ' #invites_list_entry_' + game_id).remove();
+    
+    window.open('/games/' + game_id)
+  },
+  
+  onRejectInvite: function(e) {
+    thisobj = e.data;
+    game_id = this.id.replace('reject_game_', '');
+    $.post('/games/' + game_id + '/reject');
+    
+    $('#invites_list_entry_' + game_id).fadeOut();
   }
   
 };

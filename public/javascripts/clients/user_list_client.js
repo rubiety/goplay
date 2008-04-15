@@ -43,15 +43,16 @@ UserListClient.prototype = {
     
     $('#' + this.usersbox).append($(
       '<div class="user" style="display: none" id="user_list_entry_' + data.source_user.id + '">' + 
-      '  <img src="/images/avatars/bhughes.jpg" />' +
+      '  <img src="' + data.source_user.gravatar_url +' " />' +
       '  <span>' + data.source_user.name + '</span>' +
       '  ' + data.source_user.description +
       '  ' + '<br />' + 
       '  <a href="/games/new?height=400&width=600&opponent_id=' + data.source_user.id + '" title="Challenge ' + data.source_user.name + ' to Game" class="thickbox">Challenge to Game</a>' + 
       '  <br style="clear: both" />' + 
-      '  <script language="JavaScript">$("a[rel*=facebox]").facebox();</script>' +
       '</div>'
     ));
+    
+    $("a[rel*=facebox]").facebox();
     
     $('#' + this.usersbox + ' #user_list_entry_' + data.source_user.id).fadeIn();
   },

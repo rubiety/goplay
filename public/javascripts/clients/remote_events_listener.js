@@ -51,6 +51,8 @@ RemoteEventsListener.prototype = {
     this.url = url;
     this.frequency = options.frequency || '2s';
     this.listeners = {};
+    this.logEvents = options.logEvents || true;
+    this.events = [];
     
     this.startEventPoller();
   },
@@ -73,6 +75,10 @@ RemoteEventsListener.prototype = {
     // Get JSON array from URL...
     $.getJSON(this.url, function(events) {
       $.each(events, function(i, event) {
+        // Log Event
+        if (thisobj.logEvents) {
+          thisobj.events.push(event);
+        }
         
         // For each event type...
         for (eventType in thisobj.listeners) {

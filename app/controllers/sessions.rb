@@ -35,7 +35,7 @@ class Sessions < Application
     cookies.delete :auth_token
     reset_session
     
-    flash[:confirm] = 'Successfully Logged Out'
+    flash.now[:confirm] = 'Successfully Logged Out'
     redirect_back_or_default('/')
   end
   

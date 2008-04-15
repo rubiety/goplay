@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+<title>Go Play!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<%= css_include_tag 'master' %>
+<%= css_include_tag 'facebox' %>
+
+<%= js_include_tag 'jquery/jquery' %>
+<%= js_include_tag 'jquery/jquery.corner' %>
+<%= js_include_tag 'jquery/jquery.timers' %>
+<%= js_include_tag 'jquery/jquery.form' %>
+<%= js_include_tag 'jquery/jquery.scrollto' %>
+<%= js_include_tag 'jquery/jquery.svg' %>
+
+<%= js_include_tag 'facebox' %>
+<%= js_include_tag 'application' %>
+
+<%= js_include_tag 'clients/remote_events_listener' %>
+<%= js_include_tag 'clients/ping_client' %>
+<%= js_include_tag 'clients/user_list_client' %>
+<%= js_include_tag 'clients/chat_client' %>
+<%= js_include_tag 'clients/game_invites_client' %>
+<%= js_include_tag 'clients/go_client' %>
+
+<%= catch_content :for_head %>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+<div id="innerwrapper">
+
+<div id="mainframe">
+
+<div id="contentframe">
+
+<%= catch_content :for_layout %>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<div id="footer">
+  A <a href="http://www.benhughes.name/">Ben Hughes</a> Production &nbsp;|&nbsp; Created with <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://www.merbivore.com/">Merb</a>, <a href="http://www.datamapper.com/">DataMapper</a>, and <a href="http://www.jquery.com/">jQuery</a>
+</div>
+
+</body>
+</html>
