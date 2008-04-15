@@ -199,7 +199,7 @@ GoClient.prototype = {
   	column = Math.round((x - thisobj.board.left) / thisobj.board.columnSize);
   	
   	// Return if row or column is out of bounds
-  	if (row >= thisobj.game.rowSize || column >= thisobj.game.columnSize) { return; }
+  	if (row >= thisobj.game.rowSize || column >= thisobj.game.columnSize) { return true; }
   	
   	$.post('/games/' + thisobj.game_id + '/moves', { row: row, column: column }, function(data) {
   	  
@@ -231,10 +231,17 @@ GoClient.prototype = {
   },
   
   flash: function(errors) {
-    if (!errors || errors.length == 0) {
-      $('#' + this.board_id + ' #controls #errors').text('');
-    } else {
-      $('#' + this.board_id + ' #controls #errors').text(errors[0]);
+    $('#message_block > div').remove();
+    
+    if (errors && errors.length > 0) {
+      $('#message_block').append('<div style="display: none" class="container error" />');
+      $('#message_block > div.error').append('<ul />');
+      
+      for (i = 0; i < errors.length; i++) {
+        $('#message_block > div.error > ul').append('<li>' + errors[0] + '</li>')
+      }
+      
+      $('#message_block > div.error').fadeIn();
     }
   },
   

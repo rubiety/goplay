@@ -1,7 +1,5 @@
 Basic TODO
 ===========================
-* Better Invite Management System (Support in-game requests and multiple windows)
-* Better Go Client Error Displaying System
 * Implement CaptureEvent & Broadcast to Both Users
 * Implement User Leave Game End Notification
 * Read Up on Go & Go Programming
