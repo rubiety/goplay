@@ -47,14 +47,13 @@ UserListClient.prototype = {
       '  <span>' + data.source_user.name + '</span>' +
       '  ' + data.source_user.description +
       '  ' + '<br />' + 
-      '  <a href="/games/new?height=400&width=600&opponent_id=' + data.source_user.id + '" title="Challenge ' + data.source_user.name + ' to Game" class="thickbox">Challenge to Game</a>' + 
+      '  <a class="challengelink" href="/games/new?height=400&width=600&opponent_id=' + data.source_user.id + '" title="Challenge ' + data.source_user.name + ' to Game" class="thickbox">Challenge to Game</a>' + 
       '  <br style="clear: both" />' + 
       '</div>'
     ));
     
-    $("a[rel*=facebox]").facebox();
-    
     $('#' + this.usersbox + ' #user_list_entry_' + data.source_user.id).fadeIn();
+    $('#' + this.usersbox + ' #user_list_entry_' + data.source_user.id + ' a.challengelink').facebox();
   },
   
   onUserLeft: function(event) {
