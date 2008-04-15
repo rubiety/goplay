@@ -33,6 +33,10 @@ ChatClient.prototype = {
   
   initialize: function() {
     this.registerEventListeners();
+    
+    if ($('#' + this.chatbox + ' div').size() > 0) {
+      $('#' + this.chatbox).scrollTo('div:last');
+    }
   },
   
   registerEventListeners: function() {

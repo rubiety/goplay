@@ -31,6 +31,7 @@ Merb::Router.prepare do |r|
   r.resources(:games, :member => {:accept => :post, :reject => :post, :leave => :post}) do |games|
     games.resources :messages
     games.resources :moves
+    games.resources :events
   end
   
   r.to :controller => 'main' do |main|

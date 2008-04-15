@@ -95,6 +95,11 @@ class Game < DataMapper::Base
     self.completed_status = 'Cancelled'
   end
   
+  # Determines if the provided user is a player
+  def player?(current_user)
+    black_player == current_user or white_player == current_user
+  end
+  
   # Determines the opponent given a "current_user"
   def opponent_of(current_user)
     return black_player if white_player == current_user
@@ -134,7 +139,8 @@ class Game < DataMapper::Base
         :user => for_player.to_hash, 
         :opponent => (self.opponent_of(for_player) || {}).to_hash.merge(:color => self.color_of(self.opponent_of(for_player))),
         :color => self.color_of(for_player),
-        :my_turn => players_turn?(for_player)
+        :my_turn => players_turn?(for_player),
+        :status => self.status
       }.to_json
     else
       self.to_hash.to_json

@@ -42,6 +42,7 @@ class Messages < Application
   
   def fetch_game
     @game = Game[params[:game_id]] if params[:game_id]
+    @game = nil if @player and !@game.player?(current_user)
   end
   
   def fetch_all_messages
