@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'digest/md5'
 require File.join(File.dirname(__FILE__), '..', '..', "lib", "authenticated_system", "authenticated_dependencies") rescue nil
 
 # == User
@@ -69,6 +70,11 @@ class User < DataMapper::Base
   # User handle - for now defaults ot login
   def handle
     self.login
+  end
+  
+  # Gravatar: www.gravatar.com
+  def gravatar_url(size = 50)
+    "http://gravatar.com/avatar/" + Digest::MD5::hexdigest(self.email) + "?size=" + size.to_s
   end
   
   # Hash Representation

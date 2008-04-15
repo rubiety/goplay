@@ -20,7 +20,7 @@ module Go
     end
     
     # If 1. The stone is isolated - no friendly neighbor
-    #   Create new string
+    #   Create new group
     # 
     # If 2. Stone has exactly one friendly neighbor
     #   Append to neighbor's string and recalc liberties

@@ -22,7 +22,7 @@ $(document).ready(function() {
   <div id="userslist">
     <% @users.each do |user| %>
     <div class="user" id="user_list_entry_<%= user.id %>">
-      <img src="/images/avatars/bhughes.jpg" />
+      <img src="<%= user.gravatar_url %>" />
       <span><%= h user.name %></span>
       <%= h user.description %>
       <br />
