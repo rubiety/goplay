@@ -1,17 +1,16 @@
 Basic TODO
 ===========================
-* Read Up on Merb & Deployments
-* Avatar Uploading
 * Better Invite Management System (Support in-game requests and multiple windows)
-* Detect Obvious Invalid move and error system
-* Implement Basic Capturing Checking
+* Better Go Client Error Displaying System
+* Implement CaptureEvent & Broadcast to Both Users
+* Avatar Uploading
 * Implement User Leave Game End Notification
 * Read Up on Go & Go Programming
 
 * Implement controls bar with (pass) button
 * Safari connection lockout issues?
 * RSpec Test Suite
-* JavaScript Behavior Testing Test Suite
+* JSSpec Test Suite
 
 
 New Major Features
