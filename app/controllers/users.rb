@@ -24,6 +24,9 @@ class Users < Application
     # Prepopulate message list with all messages since login
     @messages = Message.all(:conditions => {:game_id => nil, :created_at.gt => current_user.last_login_at})
     
+    # Propoluate invites list
+    @invites = Game.all(:conditions => {:status => 'Created', :black_player_id => current_user.id})
+    
     display @users
   end
   

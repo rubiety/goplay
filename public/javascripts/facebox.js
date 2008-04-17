@@ -108,14 +108,14 @@
     $(document).trigger('close.facebox')
     return false
   }
-
+  
   $(document).bind('close.facebox', function() {
     $(document).unbind('keydown.facebox')
     $('#facebox').fadeOut(function() {
       $('#facebox .content').removeClass().addClass('content')
     })
   })
-
+  
   $.fn.facebox = function(settings) {
     $.facebox.init(settings)
 

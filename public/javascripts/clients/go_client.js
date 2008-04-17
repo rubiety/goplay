@@ -57,7 +57,6 @@ GoClient.prototype = {
     this.game_id = options.game_id;
     this.board_id = options.board_id;
     this.color = options.color;
-    this.myTurn = options.myTurn || ((options.color == 'white') ? true : false);
     this.board = { id: gamebox };
     this.listener = listener;
     
@@ -70,9 +69,13 @@ GoClient.prototype = {
       thisobj.game = info.game;
       thisobj.user = info.user;
       thisobj.opponent = info.opponent;
+      thisobj.myTurn = info.my_turn;
       
-      thisobj.createGameBoard();
       thisobj.registerEventListeners();
+      
+      if (info.status != 'Created') {
+        thisobj.createGameBoard();
+      }
     });
   },
   
@@ -146,8 +149,8 @@ GoClient.prototype = {
     $('#' + this.board_id + ' #svgboard #stone_' + row + '_' + column).remove();
   },
   
-  onGameInviteResponse: function(event) {
-    data = event.payload;
+  onGameInviteResponse: function(e) {
+    data = e.payload;
     
     switch (data.response) {
       case 'Accepted':
@@ -162,35 +165,35 @@ GoClient.prototype = {
     }
   },
   
-  onMove: function(event) {
-    data = event.payload;
+  onMove: function(e) {
+    data = e.payload;
     this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
     
     this.toggleTurn();
     this.updateTurn();
   },
   
-  onGameEnd: function(event) {
-    data = event.payload;
+  onGameEnd: function(e) {
+    data = e.payload;
     
     $('#' + this.board_id + ' #controls #status').text("Game Ended: " + data.completed_status);
     this.active = false;
   },
   
-  startGame: function(event) {
+  startGame: function(e) {
     this.createGameBoard();
     this.active = true;
   },
   
-  onBoardClick: function(event) {
-    thisobj = event.data;
+  onBoardClick: function(e) {
+    thisobj = e.data;
     
     // Only allow click if game is active and it is my turn
     if (!thisobj.active || !thisobj.myTurn) { return; }
     
     // Find the column and row clicked
-    var x = event.pageX - this.offsetLeft;
-  	var y = event.pageY - this.offsetTop;
+    var x = e.pageX - this.offsetLeft;
+  	var y = e.pageY - this.offsetTop;
   	row = Math.round((y - thisobj.board.top) / thisobj.board.rowSize);
   	column = Math.round((x - thisobj.board.left) / thisobj.board.columnSize);
   	
@@ -246,15 +249,16 @@ GoClient.prototype = {
     }
   },
   
-  onUnload: function(event) {
+  onUnload: function(e) {
+    $.post('/games/' + e.data + '/leave', {});
     return true;
     
     if (confirm('You are about to leave this game.  This will cause you to forfeit to your opponent.  Are you sure you want to do this?')) {
-      $.post('/games/' + event.data + '/leave', {});
+      $.post('/games/' + e.data + '/leave', {});
       return true;
     } else {
-      event.stopPropagation();
-      event.preventDefault();
+      e.stopPropagation();
+      e.preventDefault();
       return false;
     }
   }

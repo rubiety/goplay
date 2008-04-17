@@ -3,7 +3,7 @@
 <h2>With:</h2>
 <div id="userslist">
   <div class="user">
-    <img src="/images/avatars/bhughes.jpg" />
+    <img src="<%= @opponent.gravatar_url %>" />
     <span><%= h @opponent.name %></span>
     <%= h @opponent.description %>
   </div>
@@ -12,7 +12,7 @@
 <hr />
 
 <div class="formbox">
-  <% form_for :game, :action => url(:games) do %>
+  <% form_for :game, :action => url(:games), :id => 'new_game_form' do %>
     <fieldset>
       <%= hidden_field :name => :opponent_id, :value => @opponent.id %>
       <p><%= text_control :board_size, :label => 'Board Size' %></p>
@@ -20,3 +20,17 @@
     </fieldset>
   <% end %>
 </div>
+
+<script language="JavaScript">
+
+$('#new_game_form').ajaxForm({
+  dataType: 'json',
+  success: function(response) {
+    if (!response.errors && response.game_id) {
+      window.open('/games/' + response.game_id);
+      $('#facebox').fadeOut();
+    }
+  }
+});
+
+</script>

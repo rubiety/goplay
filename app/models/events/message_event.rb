@@ -7,7 +7,8 @@ class MessageEvent < Event
       :message => message.message,
       :sender => {
         :name => self.source_user.name,
-        :handle => self.source_user.handle
+        :handle => self.source_user.handle,
+        :gravatar_url => self.source_user.gravatar_url
       }
     }
   end

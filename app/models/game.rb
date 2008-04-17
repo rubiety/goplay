@@ -36,7 +36,7 @@ class Game < DataMapper::Base
   property :black_player_id, :integer
   property :board_size, :integer
   property :board_state, :text, :lazy => false
-  property :whites_turn, :boolean, :default => true
+  property :whites_turn, :boolean, :default => false
   property :status, :string   # Created => Accepted => In-Progress => Completed
   property :completed_status, :string  # Win, Draw, Cancelled
   property :white_won, :boolean
@@ -133,7 +133,8 @@ class Game < DataMapper::Base
         :game => self.to_hash, 
         :user => for_player.to_hash, 
         :opponent => (self.opponent_of(for_player) || {}).to_hash.merge(:color => self.color_of(self.opponent_of(for_player))),
-        :color => self.color_of(for_player)
+        :color => self.color_of(for_player),
+        :my_turn => players_turn?(for_player)
       }.to_json
     else
       self.to_hash.to_json
@@ -145,7 +146,8 @@ class Game < DataMapper::Base
       :white_player_id => white_player_id,
       :black_player_id => black_player_id,
       :board_size => board_size,
-      :grid => board.grid.to_a
+      :grid => board.grid.to_a,
+      :current_turn => whites_turn ? :white : :black
     }
   end
   

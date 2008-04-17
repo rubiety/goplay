@@ -27,7 +27,7 @@ class Games < Application
     when :yaml
       @game.to_yaml
     else
-      render_compound_document
+      render_compound_document :layout => 'window'
     end
   end
   
@@ -44,10 +44,21 @@ class Games < Application
     @game.white_player = current_user
     @game.black_player = @opponent
     
-    if @game.save
-      redirect url(:game, @game)
+    case content_type
+    when :js
+      if @game.save
+        {:game_id => @game.to_param}.to_json
+      else
+        {:errors => @game.errors}.to_json
+      end
+      
     else
-      render :new
+      if @game.save
+        redirect url(:game, @game)
+      else
+        render :new
+      end
+      
     end
   end
   
