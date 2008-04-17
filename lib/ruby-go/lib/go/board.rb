@@ -27,5 +27,9 @@ module Go
       self.groups = value[:groups] if value[:groups]
     end
     
+    # String Representation
+    def to_s
+      self.grid.to_s
+    end
   end
 end
