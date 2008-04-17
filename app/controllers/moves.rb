@@ -34,11 +34,11 @@ class Moves < Application
         move_captures << {:row => capture.row, :column => capture.column}
       end
       
-    rescue Board::MoveTargetExistsError => e
+    rescue Go::Errors::MoveTargetExistsError => e
       move_errors << 'Invalid Move: Move target already exists!'
-    rescue Board::RuleOfKoError => e
+    rescue Go::Errors::RuleOfKoError => e
       move_errors << 'Invalid Move: Rule of Ko'
-    rescue Board::SuicidalMoveError => e
+    rescue Go::Errors::SuicidalMoveError => e
       move_errors << 'Invalid Move: This move would be suicidal!'
     end
     

@@ -70,3 +70,6 @@ begin
   require File.join(File.dirname(__FILE__), '..', 'lib', 'authenticated_system/authenticated_dependencies') 
 rescue LoadError
 end
+
+### Load Ruby-Go
+require File.join(File.dirname(__FILE__), '..', 'lib', 'ruby-go', 'lib', 'go')

@@ -57,12 +57,12 @@ class Game < DataMapper::Base
   # Constructs the game and sets the initial status to Created
   def initialize(*args)
     super
+    
     self.status = 'Created'
   end
   
-  # Wraps an associated instance of +Board+ through composition.
   def board
-    @board ||= Board.new(self)
+    @board ||= Go::Board.new(self.board_size.to_i)
   end
   
   # Merb-special method used when constructing pretty URLs
@@ -145,7 +145,7 @@ class Game < DataMapper::Base
       :white_player_id => white_player_id,
       :black_player_id => black_player_id,
       :board_size => board_size,
-      :grid => board.grid
+      :grid => board.grid.to_a
     }
   end
   
@@ -157,13 +157,11 @@ class Game < DataMapper::Base
   end
   
   def encode_board_state
-    self.board_state = YAML::dump(:grid => board.grid, :strings => board.strings)
+    self.board_state = YAML::dump(board.to_hash)
   end
   
   def decode_board_state
     return true unless board_state
-    decoded = YAML::load(board_state)
-    board.grid = decoded[:grid]
-    board.strings = decoded[:strings]
+    board.from_hash(YAML::load(board_state))
   end
 end

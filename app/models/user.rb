@@ -122,6 +122,9 @@ class User < DataMapper::Base
   
   # Force-leaves users who have not pinged in 30 seconds
   def self.sweep_stale_users!
+    # Disabling this for debugging reasons:
+    return true
+    
     self.each(:active => true, :last_pinged_at.lt => Time.now - 30.seconds) do |stale_user|
       stale_user.leave!
     end
