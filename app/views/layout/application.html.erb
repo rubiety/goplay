@@ -41,7 +41,7 @@
   
   <% if logged_in? %>
   <div id="loggedin">
-    <img src="/images/avatars/bhughes.jpg" />
+    <img src="<%= current_user.gravatar_url %>" />
     <p>Welcome, <%= current_user.name %></p>
     <p><a href="/">Home</a> | <a href="/users/current/edit">Profile</a> | <a href="/logout">Logout</a></p>
   </div>

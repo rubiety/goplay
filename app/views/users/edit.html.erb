@@ -28,6 +28,7 @@ $(document).ready(function() {
         <p><%= text_control :last_name, :label => 'Last Name' %></p>
         <p><%= text_control :login, :label => 'Username' %></p>
         <p><%= text_control :email, :label => 'Email Address', :size => 25 %></p>
+        <p><label>Gravatar</label> <a href="http://en.gravatar.com/site/signup" target="_blank">Get your gravatar</a> for the above e-mail address.</p>
         <p><%= text_area_control :description, :label => 'Brief Description of Yourself', :rows => 2, :cols => 45 %>
         <p><%= submit_field :value => 'Save' %></p>
       </fieldset>
