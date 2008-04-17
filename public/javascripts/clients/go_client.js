@@ -62,6 +62,7 @@ GoClient.prototype = {
     
     this.active = true;
     this.captures = 0;
+    this.opponentCaptures = 0;
     
     thisobj = this;
     
@@ -170,6 +171,17 @@ GoClient.prototype = {
     
     this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
     
+    for (i = 0; i < data.captures.length; i++) {
+	    capture = data.captures[i];
+	    this.opponentCapturedPiece(capture.row, capture.column)
+	  }
+	  
+	  if (data.captures.length > 0) {
+	    this.flash([this.opponent.name + " Captured " + data.captures.length + " Stones"]);
+	  } else {
+	    this.flash();
+	  }
+    
     this.toggleTurn();
     this.updateTurn();
   },
@@ -211,10 +223,14 @@ GoClient.prototype = {
     	  
     	  for (i = 0; i < data.captures.length; i++) {
     	    capture = data.captures[i];
-    	    thisobj.pieceCaptured(capture.row, capture.column)
+    	    thisobj.capturePiece(capture.row, capture.column);
     	  }
     	  
-    	  thisobj.flash();
+    	  if (data.captures.length > 0) {
+    	    thisobj.flash(["You Captured " + data.captures.length + " Stones"]);
+    	  } else {
+    	    thisobj.flash();
+    	  }
     	  
     	} else {
     	  thisobj.flash(data.errors);
@@ -223,11 +239,18 @@ GoClient.prototype = {
   	}, 'json');
   },
   
-  pieceCaptured: function(row, column) {
-    thisobj.removePiece(row, column);
+  capturePiece: function(row, column) {
+    this.removePiece(row, column);
     this.captures++;
     
     $('#' + this.board_id + ' #controls #captures').text('Captures: ' + this.captures);
+  },
+  
+  opponentCapturedPiece: function(row, column) {
+    this.removePiece(row, column);
+    this.opponentCaptures++;
+    
+    $('#' + this.board_id + ' #controls #opponent_captures').text('Opponent Captures: ' + this.opponentCaptures);
   },
   
   flash: function(errors) {
