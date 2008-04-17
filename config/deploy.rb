@@ -1,7 +1,8 @@
 set :application, "goplay"
-set :repository, "http://svn.railsgarden.com/projects/#{application}/trunk"
+set :repository, "git@github.com:railsgarden/goplay.git"
 
-set :scm, :subversion
+set :scm, :git
+set :branch, 'origin/master'
 
 task :production do
 	role :web, "cedar.synenterprises.com"
@@ -43,6 +44,7 @@ namespace :deploy do
 end
 
 after "deploy:update_code", :create_permissions
+after "deploy:update_code", :create_shared_links
 
 task :create_permissions do
   run "find #{release_path}/public -type d -exec chmod 0755 {} \\;" 
@@ -50,3 +52,6 @@ task :create_permissions do
   run "chmod 0755 #{release_path}/public/merb.fcgi" 
 end
 
+task :create_shared_links do
+  run "cd #{release_path}/config && ln -nfs ../../../shared/config/database.yml database.yml"
+end

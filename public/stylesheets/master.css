@@ -340,6 +340,31 @@ ol li {
 }
 
 
+/*** About ***/
+#aboutframe {
+  
+}
+
+#aboutframe img {
+  float: left;
+  padding-right: 8px;
+  padding-bottom: 12px;
+}
+
+#aboutframe h2 {
+  clear: left;
+  font-size: 1.4em;
+  color: #330000;
+  margin-bottom: 0.1em;
+}
+
+#aboutframe h4 {
+  font-weight: bold;
+  color: #666666;
+  margin-bottom: 0.4em;
+}
+
+
 /*** Users & Chat ***/
 
 #userslist {
