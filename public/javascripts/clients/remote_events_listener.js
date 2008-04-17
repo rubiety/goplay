@@ -49,7 +49,7 @@ RemoteEventsListener.prototype = {
   initialize: function(url, options) {
     options = options || {};
     this.url = url;
-    this.frequency = options.frequency || '2s';
+    this.frequency = options.frequency || '3s';
     this.listeners = {};
     this.logEvents = options.logEvents || true;
     this.events = [];

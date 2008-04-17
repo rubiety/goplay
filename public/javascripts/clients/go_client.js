@@ -167,6 +167,7 @@ GoClient.prototype = {
   
   onMove: function(e) {
     data = e.payload;
+    
     this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
     
     this.toggleTurn();
@@ -250,7 +251,6 @@ GoClient.prototype = {
   },
   
   onUnload: function(e) {
-    $.post('/games/' + e.data + '/leave', {});
     return true;
     
     if (confirm('You are about to leave this game.  This will cause you to forfeit to your opponent.  Are you sure you want to do this?')) {

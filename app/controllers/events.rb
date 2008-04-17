@@ -44,6 +44,11 @@ class Events < Application
   
   private
   
+  def fetch_game
+    @game = Game[params[:game_id]] if params[:game_id]
+    @game = nil if @game and !@game.player?(@user)
+  end
+  
   def fetch_user
     @user = current_user
     raise NotFound unless @user
@@ -51,7 +56,13 @@ class Events < Application
   
   def fetch_unconsumed_events
     fetch_user
-    @events = Event.all(:user_id => current_user.id, :consumed_at => nil)
+    fetch_game
+    
+    @events = if @game
+      Event.all(:user_id => current_user.id, :game_id => @game.id, :consumed_at => nil)
+    else
+      Event.all(:user_id => current_user.id, :game_id => nil, :consumed_at => nil)
+    end
   end
   
 end

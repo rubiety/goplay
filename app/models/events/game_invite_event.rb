@@ -1,6 +1,5 @@
 class GameInviteEvent < Event
   def initialize(game)
-    self.game_id = game.key
     self.source_user = game.white_player
     self.user_id = game.black_player.id
     self.payload = {

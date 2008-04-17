@@ -50,7 +50,7 @@ GameInvitesClient.prototype = {
     data = event.payload;
     
     $('#' + this.invitesbox).append($(
-      '<div class="invite" style="display: none" id="invites_list_entry_' + data.source_user.id + '">' + 
+      '<div class="invite" style="display: none" id="invites_list_entry_' + data.game.id + '">' + 
       '  <img src="' + data.source_user.gravatar_url + '" />' +
       '  <h4>New Game Invitation</h4>' +
       '  <span>' + data.source_user.name + '</span>' +

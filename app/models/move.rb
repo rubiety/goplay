@@ -39,7 +39,6 @@ class Move < DataMapper::Base
     end
     
     game.whites_turn = !self.game.whites_turn;
-    
     true
   end
   

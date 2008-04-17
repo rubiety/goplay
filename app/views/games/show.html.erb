@@ -1,6 +1,6 @@
 <script language="JavaScript">
 $(document).ready(function() {
-  events = new RemoteEventsListener('/users/current/events');
+  events = new RemoteEventsListener('/games/<%= @game.id %>/events');
   
   chatClient = new ChatClient('messageslist', events, { game_id: <%= @game.id %> });
   goClient = new GoClient('gameboard', events, { 
