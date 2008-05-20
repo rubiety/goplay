@@ -14,7 +14,7 @@ Merb::Config.use do |c|
   
   c[:session_secret_key]  = 'de7842b56e33dda616b1a456d6af73cf9fd7c7b4'
   c[:session_store] = 'cookie'
-end  
+end
 
 ### Merb doesn't come with database support by default.  You need
 ### an ORM plugin.  Install one, and uncomment one of the following lines,

@@ -5,11 +5,10 @@ set :scm, :git
 set :branch, 'origin/master'
 
 task :production do
-	role :web, "cedar.synenterprises.com"
-	role :app, "cedar.synenterprises.com"
-	role :db,  "cedar.synenterprises.com", :primary => true
-
-	set :rails_env, "production"
+	role :web, "goplay.rubiety.com"
+	role :app, "goplay.rubiety.com"
+	role :db,  "goplay.rubiety.com", :primary => true
+  
 	set :deploy_to, "/var/www/goplay.rubiety.com/app"
 	set :user, "bhughes"
 	set :use_sudo, false
