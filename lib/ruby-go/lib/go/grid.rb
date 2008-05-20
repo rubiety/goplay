@@ -11,11 +11,33 @@ module Go
     end
     
     def get(row, column)
+      return nil if row >= @matrix.size or column >= @matrix.size
       @matrix[row][column]
     end
     
     def set(row, column, value)
+      return nil if row >= @matrix.size or column >= @matrix.size
       @matrix[row][column] = value
+    end
+    
+    def stone_count
+      count = 0
+      @matrix.each do |row|
+        row.each do |cell|
+          count += 1 if !cell.nil?
+        end
+      end
+      count
+    end
+    
+    def stone_count_for(color)
+      count = 0
+      @matrix.each do |row|
+        row.each do |cell|
+          count += 1 if cell == color.to_sym
+        end
+      end
+      count
     end
     
     def occupied?(row, column)
@@ -30,6 +52,7 @@ module Go
       r = row + row_offset
       c = column + column_offset
       return nil if r < 0 or c < 0
+      return nil if r >= @matrix.size or c >= @matrix.size
       return r, c
     end
     

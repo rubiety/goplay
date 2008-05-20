@@ -42,13 +42,9 @@ module Go
     end
     
     # Origin should always be top left most stone in a string - ensure this.
-    # TODO: Holding off on this for now, not sure why we need to do this...
+    # TODO: Holding off on this for now, isn't strictly necessary...
     def update_origin!
-      min_row = self.stones.map {|r, c| r }.min
-      min_column = self.stones.map {|r, c| c }.min
-      self.origin_row = min_row
-      self.origin_column = min_column
-      self
+      
     end
     
     # Recalculates liberties

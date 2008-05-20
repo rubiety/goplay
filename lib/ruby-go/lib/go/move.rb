@@ -12,7 +12,10 @@ module Go
       raise Errors::SuicidalMoveError.new if suicidal_move?(color, row, column)
       
       add_stone(color, row, column)
-      compute_move_captures(color, row, column)
+      
+      captures = compute_move_captures(color, row, column)
+      (color == :white) ? self.white_capture_count += captures.size : self.black_capture_count += captures.size
+      captures
     end
     
     def add_stone(color, row, column)
@@ -73,15 +76,15 @@ module Go
     end
     
     # Detects a "Rule of Ko" situation, which is not allowed
+    # NOIMPL: Not Implemented
     def rule_of_ko_move?(color, row, column)
       false
     end
     
     # Detects a "Suicidal Move" situation, which is not allowed.
-    # This is the case if
-    # 1. There is no neighboring empty intersection.
-    # 2. There is no neighboring opponent string with exactly one liberty.
-    # 3. There is no neighboring friendly string with more than one liberty.
+    # NOIMPL: Not directly implemented.  Instead, this is allowed but the piece 
+    # will automatically be captured upon the next move of the opponent, so it's a waste.
+    # 
     def suicidal_move?(color, row, column)
       false
     end
