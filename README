@@ -7,7 +7,7 @@ GoPlay! was created using the Merb Ruby Framework, DataMapper Object-Relational 
 = Features
 
 * A given player can engage in multiple games at the same time (in different tabs/windows) each with a different
-  URL such as /games/23-bhughes-vs-dleveille. 
+  URL such as /games/23-bhughes-vs-dbogaard. 
 
 * Invites are treated something like a specialized chat message event in that multiple invites can come in and
   be displayed. Invites will even show in-game so if you accept a new tab with a new game will open.
