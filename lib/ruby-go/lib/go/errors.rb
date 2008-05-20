@@ -1,3 +1,5 @@
+# == Errors
+#
 module Go
   module Errors
     # Generic Invalid Move Error

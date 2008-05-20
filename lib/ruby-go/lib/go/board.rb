@@ -8,23 +8,28 @@ module Go
   class Board
     attr_accessor :size
     attr_accessor :grid
-    attr_accessor :groups
+    attr_accessor :chains
+    attr_accessor :enclosures
     
     def initialize(size)
       @size = size
       @grid = Grid.new(@size)
-      @groups = GroupList.new
+      @chains = ChainList.new(self)
     end
     
     # Dumps Board State to Hash
     def to_hash
-      {:grid => self.grid, :groups => self.groups}
+      {
+        :grid => self.grid,
+        :chains => self.chains,
+        :enclosures => self.enclosures
+      }
     end
     
     # Loads Board State from Hash
     def from_hash(value)
       self.grid = value[:grid] if value[:grid]
-      self.groups = value[:groups] if value[:groups]
+      self.chains = value[:chains] if value[:chains]
     end
     
     # String Representation

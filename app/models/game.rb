@@ -57,7 +57,6 @@ class Game < DataMapper::Base
   # Constructs the game and sets the initial status to Created
   def initialize(*args)
     super
-    
     self.status = 'Created'
   end
   
@@ -128,7 +127,7 @@ class Game < DataMapper::Base
   
   # Makes a move on the board - effectively delegates to board
   def make_move(current_user, row, column)
-    board.make_move(color_of(current_user), row, column)
+    board.move(color_of(current_user), row, column)
   end
   
   # Provides JSON representation of game
@@ -165,11 +164,11 @@ class Game < DataMapper::Base
   end
   
   def encode_board_state
-    self.board_state = YAML::dump(board.to_hash)
+    self.board_state = Base64.encode64(Marshal.dump(board.to_hash))
   end
   
   def decode_board_state
     return true unless board_state
-    board.from_hash(YAML::load(board_state))
+    board.from_hash(Marshal.load(Base64.decode64(board_state)))
   end
 end

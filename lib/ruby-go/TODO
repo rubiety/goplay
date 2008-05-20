@@ -1,0 +1,9 @@
+Ruby-Go TODO
+============
+
+* Documentation-generating rake tasks
+* Basic Scoring Implementation
+* RSpec Setup
+* RCov
+* Basic Examples
+* Detect Suicidal Move & Disallow

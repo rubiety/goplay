@@ -1,7 +1,6 @@
 Basic TODO
 ===========================
-* Replace FaceBox with In-Line Invite Sending
-* Implement User Leave Game End Notification
 
+* Implement User Leave Game End Notification
 * Implement controls bar with (pass) button
-* Safari connection lockout issues?
+* End Game Scoring

@@ -11,9 +11,6 @@ require File.join(File.dirname(__FILE__), '..', '..', "lib", "authenticated_syst
 # which take care of broadcasting the appropriate events to all active clients as 
 # well as updating the aforementioned +active+ flag. 
 # 
-# === Suspending Users
-# Users can also be suspended 
-# 
 class User < DataMapper::Base
   include AuthenticatedSystem::Model
   
