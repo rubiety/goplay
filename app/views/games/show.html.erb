@@ -23,6 +23,12 @@ $(document).ready(function() {
 <div class="leftcolumn">
   <h1><%= @game.white_player.name %> vs. <%= @game.black_player.name %></h1>
   
+  <div id="gameresults" style="<%= @game.status != 'Complete' ? 'display: none' : '' %>">
+    <h4><%= @game.completed_status %></h4>
+    <strong>White's Score:</strong> <span id="white_score"><%= @game.white_score %></span><br />
+    <strong>Black's Score:</strong> <span id="black_score"><%= @game.black_score %></span>
+  </div>
+  
   <div id="gameboard">
     <div id="controls">
       <span id="status"></span>
@@ -56,9 +62,15 @@ $(document).ready(function() {
   
   <%= message_block %>
   
-  <div id="gameactions">
-    <p><%= link_to_function 'Leave Game', 'window.close();' %></p>
-  </div>
+  <% unless @game.status == 'Complete' %>
+    <div id="gameactions">
+      <p><%= link_to 'Leave Game', '#', :id => 'leave_game_link' %></p>
+      <p>
+        <%= link_to 'Pass Turn', '#', :id => 'pass_turn_link' %><br />
+        <small>Only do this is you are sure you have no more potential beneficial moves.  If your opponent passes after you pass, the game will end.</small>
+      </p>
+    </div>
+  <% end %>
   
   <h1>Chat</h1>
   <div id="chatbox">

@@ -20,9 +20,15 @@ class Moves < Application
   # POST /game/1/moves
   def create
     fetch_game
-    @move = Move.new(:row => params[:row], :column => params[:column])
-    @move.game = @game
+    
+    if params[:pass]
+      @move = Move.new(:pass => true)
+    else
+      @move = Move.new(:row => params[:row], :column => params[:column])
+    end
+    
     @move.user = current_user
+    @move.game = @game
     
     move_captures = []
     move_errors = []
@@ -30,9 +36,16 @@ class Moves < Application
     begin
       @move.save
       
+      last_move = Move.first(:conditions => {:game_id => @game.id, :id.not => @move.id}, :order => 'created_at DESC') if @move.pass?
+      if @move.pass? and !last_move.nil? and last_move.pass?
+        @game.complete!
+      end
+      
       @move.captures.each do |capture|
         move_captures << {:row => capture.row, :column => capture.column}
       end
+      
+      @game.save
       
     rescue Go::Errors::MoveTargetExistsError => e
       move_errors << 'Invalid Move: Move target already exists!'

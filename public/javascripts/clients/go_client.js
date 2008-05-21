@@ -72,7 +72,9 @@ GoClient.prototype = {
       thisobj.opponent = info.opponent;
       thisobj.myTurn = info.my_turn;
       
-      thisobj.registerEventListeners();
+      if (info.status != 'Complete') {
+        thisobj.registerEventListeners();
+      }
       
       if (info.status != 'Created') {
         thisobj.createGameBoard();
@@ -90,6 +92,8 @@ GoClient.prototype = {
     this.listener.on('GameEndEvent', this.onGameEnd, this);
     
     $(window).bind('unload', this.game_id, this.onUnload);
+    $('#leave_game_link').bind('click', this.game_id, this.onLeave);
+    $('#pass_turn_link').bind('click', this, this.onPassTurnClick);
   },
   
   createGameBoard: function() {
@@ -124,7 +128,9 @@ GoClient.prototype = {
     }
     
     // Initialize Click Listener
-    $('#' + this.board_id + ' #svgboard').bind('click', this, this.onBoardClick);
+    if (this.game.status != 'Complete') {
+      $('#' + this.board_id + ' #svgboard').bind('click', this, this.onBoardClick);
+    }
     
     // Show Turn Status
     this.updateTurn();
@@ -169,27 +175,75 @@ GoClient.prototype = {
   onMove: function(e) {
     data = e.payload;
     
-    this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
+    if (data.pass) {
+      this.flash([this.opponent.name + " Passed"]);
+      
+    } else {
+      
+      this.createPiece(parseInt(data.row), parseInt(data.column), this.opponent.color);
     
-    for (i = 0; i < data.captures.length; i++) {
-	    capture = data.captures[i];
-	    this.opponentCapturedPiece(capture.row, capture.column)
-	  }
+      for (i = 0; i < data.captures.length; i++) {
+  	    capture = data.captures[i];
+  	    this.opponentCapturedPiece(capture.row, capture.column)
+  	  }
 	  
-	  if (data.captures.length > 0) {
-	    this.flash([this.opponent.name + " Captured " + data.captures.length + " Stones"]);
-	  } else {
-	    this.flash();
-	  }
+  	  if (data.captures.length > 0) {
+  	    this.flash([this.opponent.name + " Captured " + data.captures.length + " Stones"]);
+  	  } else {
+  	    this.flash();
+  	  }
+  	  
+    }
     
     this.toggleTurn();
     this.updateTurn();
   },
   
+  onPassTurnClick: function(e) {
+    thisobj = e.data;
+    
+    $.post('/games/' + thisobj.game_id + '/moves', { pass: true }, function(data) {
+  	  
+  	  if (data.errors.length == 0) {
+  	    thisobj.flash(["You Passed"]);
+        thisobj.toggleTurn();
+        thisobj.updateTurn();
+    	  
+    	} else {
+    	  thisobj.flash(data.errors);
+    	}
+    	
+  	}, 'json');
+  	
+  },
+  
   onGameEnd: function(e) {
     data = e.payload;
     
-    $('#' + this.board_id + ' #controls #status').text("Game Ended: " + data.completed_status);
+    $('#gameresults').show();
+    
+    this.game.status = data.status;
+    this.game.completed_status = data.status;
+    
+    if (data.completed_status == 'Win') {
+      $('#gameresults h4').text((data.white_won) ? "White Won!" : "Black Won!");
+      $('#gameresults #white_score').text(data.white_score);
+      $('#gameresults #black_score').text(data.black_score);
+      
+      $('#' + this.board_id + ' #controls #status').text("Game Ended");
+      
+    } else if (data.completed_status == 'Draw') {
+      $('#gameresults h4').text("Draw!");
+      $('#gameresults #white_score').text(data.white_score);
+      $('#gameresults #black_score').text(data.black_score);
+      
+      $('#' + this.board_id + ' #controls #status').text("Game Ended");
+      
+    } else {
+      $('#gameresults h4').text(data.completed_status);
+      
+    }
+    
     this.active = false;
   },
   
@@ -200,6 +254,10 @@ GoClient.prototype = {
   
   onBoardClick: function(e) {
     thisobj = e.data;
+    
+    if (thisobj.game.status == 'Complete') {
+      return false;
+    }
     
     // Only allow click if game is active and it is my turn
     if (!thisobj.active || !thisobj.myTurn) { return; }
@@ -273,6 +331,11 @@ GoClient.prototype = {
   },
   
   updateTurn: function() {
+    if (this.game.status == 'Complete') {
+      $('#' + this.board_id + ' #controls #status').text("Game Completed");
+      return;
+    }
+    
     if (this.myTurn) {
       $('#' + this.board_id + ' #controls #status').text("Your Turn!");
     } else {
@@ -280,9 +343,7 @@ GoClient.prototype = {
     }
   },
   
-  onUnload: function(e) {
-    return true;
-    
+  onLeave: function(e) {
     if (confirm('You are about to leave this game.  This will cause you to forfeit to your opponent.  Are you sure you want to do this?')) {
       $.post('/games/' + e.data + '/leave', {});
       return true;
@@ -291,6 +352,10 @@ GoClient.prototype = {
       e.preventDefault();
       return false;
     }
+  },
+  
+  onUnload: function(e) {
+    // Don't prevent from closing
   }
   
 };

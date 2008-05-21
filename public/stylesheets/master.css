@@ -452,6 +452,19 @@ ol li {
 
 /*** Game Board ***/
 
+#gameresults {
+  background-color: #990000;
+  border: 1px solid #330000;
+  padding: 10px;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+}
+
+#gameresults h4 {
+  font-weight: normal;
+  font-size: 1.3em;
+}
+
 #gameboard {
   
 }

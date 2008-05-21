@@ -37,9 +37,11 @@ class Game < DataMapper::Base
   property :board_size, :integer
   property :board_state, :text, :lazy => false
   property :whites_turn, :boolean, :default => false
-  property :status, :string   # Created => Accepted => In-Progress => Completed
-  property :completed_status, :string  # Win, Draw, Cancelled
+  property :status, :string   # Created => Accepted => In-Progress => Complete
+  property :completed_status, :string  # Win, Cancelled
   property :white_won, :boolean
+  property :white_score, :integer
+  property :black_score, :integer
   property :created_at, :datetime
   property :updated_at, :datetime
   
@@ -69,6 +71,19 @@ class Game < DataMapper::Base
     "#{id}-#{white_player.handle.downcase}-vs-#{black_player.handle.downcase}"
   end
   
+  # Calculates Game Scores & Winner
+  def score!
+    self.white_score = self.board.compute_score_for(:white)
+    self.black_score = self.board.compute_score_for(:black)
+    
+    if white_score == black_score
+      self.completed_status = 'Draw'
+    else
+      self.completed_status = 'Win'
+      self.white_won = (self.white_score > self.black_score)
+    end
+  end
+  
   # User has accepted the invite, update status and set invite response event
   def accept!
     self.status = 'Accepted'
@@ -86,10 +101,15 @@ class Game < DataMapper::Base
   # Game is complete
   def complete!
     self.status = 'Complete'
+    self.score!
+    
+    GameEndEvent.new(self, self.white_player).enqueue
+    GameEndEvent.new(self, self.black_player).enqueue
   end
   
   # Game was cancelled by a user leaving/forfeiting
   def cancel!
+    self.score!
     self.status = 'Complete'
     self.completed_status = 'Cancelled'
   end
@@ -152,7 +172,9 @@ class Game < DataMapper::Base
       :black_player_id => black_player_id,
       :board_size => board_size,
       :grid => board.grid.to_a,
-      :current_turn => whites_turn ? :white : :black
+      :current_turn => whites_turn ? :white : :black,
+      :status => status,
+      :completed_status => completed_status
     }
   end
   

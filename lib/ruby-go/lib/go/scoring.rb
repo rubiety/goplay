@@ -54,7 +54,7 @@ module Go
         elsif neighbors.size == 1
           neighbors.first.add_space(row, column)
         else
-          new_enclosure = self.enclosures.add(color, row, column)
+          new_enclosure = self.enclosures.add(row, column)
           neighbors.each {|e| new_enclosure.spaces += e.spaces }
           neighbors.each {|e| self.enclosures.remove(e) }
           new_enclosure.spaces_updated!
@@ -65,7 +65,6 @@ module Go
     def clear_enclosures!
       self.enclosures = EnclosureList.new(self)
     end
-    
     
   end
 end
