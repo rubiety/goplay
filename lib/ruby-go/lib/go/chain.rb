@@ -12,7 +12,6 @@ module Go
     attr_accessor :origin_column
     attr_accessor :stones
     attr_accessor :liberties
-    attr_accessor :neighbors
     
     def initialize(chain_list, color, row, column)
       self.chain_list = chain_list
@@ -22,7 +21,6 @@ module Go
       
       self.stones = [[row, column]]
       self.liberties = []
-      self.neighbors = []
       self.stones_updated!
     end
     
@@ -37,14 +35,7 @@ module Go
     
     # Should call this if manually adding to stones array for efficiency
     def stones_updated!
-      update_origin!
       recalculate_liberties!
-    end
-    
-    # Origin should always be top left most stone in a string - ensure this.
-    # TODO: Holding off on this for now, isn't strictly necessary...
-    def update_origin!
-      
     end
     
     # Recalculates liberties

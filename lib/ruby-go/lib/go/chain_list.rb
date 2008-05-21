@@ -17,8 +17,8 @@ module Go
     def black; of_color(:black); end
     
     def neighbors_of(color, row, column)
-      board.grid.neighbors_of(row, column).map do |pair|
-        find_by_position(color, pair[0], pair[1])
+      board.grid.neighbors_of(row, column).map do |r, c|
+        find_by_position(color, r, c)
       end.compact.uniq
     end
     

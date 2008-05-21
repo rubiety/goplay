@@ -48,9 +48,19 @@ module Go
       get(row, column).nil?
     end
     
+    def free_spaces
+      spaces = []
+      @matrix.each_with_index do |row, row_index|
+        row.each_with_index do |column, column_index|
+          spaces << [row_index, column_index] if column.nil?
+        end
+      end
+      spaces
+    end
+    
     def offset_of(row, column, row_offset, column_offset)
-      r = row + row_offset
-      c = column + column_offset
+      r = row.to_i + row_offset.to_i
+      c = column.to_i + column_offset.to_i
       return nil if r < 0 or c < 0
       return nil if r >= @matrix.size or c >= @matrix.size
       return r, c

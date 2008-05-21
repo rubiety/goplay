@@ -6,6 +6,8 @@ require 'go/errors'
 require 'go/grid'
 require 'go/chain'
 require 'go/chain_list'
+require 'go/enclosure'
+require 'go/enclosure_list'
 require 'go/move'
 require 'go/scoring'
 

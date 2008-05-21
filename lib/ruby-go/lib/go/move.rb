@@ -46,7 +46,7 @@ module Go
         
       else
         new_chain = self.chains.add(color, row, column)
-        neighbors.each {|c| new_chain.stones << c.stones }
+        neighbors.each {|c| new_chain.stones += c.stones }
         neighbors.each {|c| self.chains.remove(c) }
         new_chain.stones_updated!
         

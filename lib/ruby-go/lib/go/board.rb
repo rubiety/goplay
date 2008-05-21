@@ -9,6 +9,7 @@ module Go
     attr_accessor :size
     attr_accessor :grid
     attr_accessor :chains
+    attr_accessor :enclosures
     attr_accessor :white_capture_count
     attr_accessor :black_capture_count
     
@@ -16,6 +17,7 @@ module Go
       @size = size
       @grid = Grid.new(@size)
       @chains = ChainList.new(self)
+      @enclosures = EnclosureList.new(self)
       @white_capture_count = 0
       @black_capture_count = 0
     end
@@ -29,6 +31,7 @@ module Go
       {
         :grid => self.grid,
         :chains => self.chains,
+        :enclosures => self.enclosures,
         :white_capture_count => self.white_capture_count,
         :black_capture_count => self.black_capture_count
       }
@@ -38,6 +41,7 @@ module Go
     def from_hash(value)
       self.grid = value[:grid] if value[:grid]
       self.chains = value[:chains] if value[:chains]
+      self.enclosures = value[:enclosures] if value[:enclosures]
       self.white_capture_count = value[:white_capture_count] if value[:white_capture_count]
       self.black_capture_count = value[:black_capture_count] if value[:black_capture_count]
     end
